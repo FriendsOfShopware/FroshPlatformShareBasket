@@ -1,0 +1,14 @@
+{
+    "frosh-share-basket": {
+        "general": {
+            "mainMenuItemGeneral": "Artikel in gesp. Warenkörben",
+            "descriptionTextModule": "Übersicht der gespeicherten Artikel"
+        },
+        "list": {
+            "columnProductNumber": "Artikelnummer",
+            "columnProductName": "Artikel",
+            "columnProductSaveCount": "Gespeichert",
+            "columnProductQuantity": "Menge"
+        }
+    }
+}

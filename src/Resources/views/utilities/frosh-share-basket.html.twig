@@ -1,0 +1,56 @@
+{% block layout_utilities_frosh_share_basket %}
+    <div class="js-frosh-share-basket-container">
+
+        {% if froshShareBasketState is defined %}
+            {% set snippetName = "frosh-share-basket.#{froshShareBasketState}" %}
+            {% sw_include '@Storefront/utilities/alert.html.twig' with {
+                type: "info",
+                content: snippetName|trans
+            } %}
+        {% endif %}
+
+        <div class="frosh-share-basket--buttons" data-frosh-share-basket-buttons="true">
+
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <button class="btn btn-secondary btn-share-basket-url" type="button">
+                        <i class="fas fa-external-link-alt"></i>
+                        {{ 'frosh-share-basket.copyUrl'|trans }}
+                    </button>
+                </div>
+                <input type="text" id="share-basket-url" class="form-control" value="{{ froshShareBasketUrl }}">
+            </div>
+
+            {% if shopware.config.ShareBasket.config.email %}
+                <a class="btn btn-primary btn-share-basket-email"
+                   target="_blank"
+                   href="mailto:%20?subject={{ "frosh-share-basket.shareTitle"|trans }}%20{{ shopware.config.shopName }}&body={{ froshShareBasketUrl }}">
+                    <i class="fas fa-envelope"></i> {{ "frosh-share-basket.email"|trans }}
+                </a>
+            {% endif %}
+            {% if shopware.config.ShareBasket.config.facebook %}
+                <a class="btn btn-primary btn-share-basket-facebook"
+                   target="_blank"
+                   href="https://www.facebook.com/sharer/sharer.php?quote={{ "frosh-share-basket.shareTitle"|trans }} {{ shopware.config.shopName }}&u={{ froshShareBasketUrl }}">
+                    <i class="fab fa-facebook-f"></i> {{ "frosh-share-basket.facebook"|trans }}
+                </a>
+            {% endif %}
+            {% if shopware.config.ShareBasket.config.whatsapp %}
+                <a class="btn btn-primary btn-share-basket-whatsapp"
+                   target="_blank"
+                   href="https://api.whatsapp.com/send?text={{ "frosh-share-basket.shareTitle"|trans }} {{ shopware.config.shopName }} {{ froshShareBasketUrl }}">
+                    <i class="fab fa-whatsapp"></i> {{ "frosh-share-basket.whatsapp"|trans }}
+                </a>
+            {% endif %}
+            {% if shopware.config.ShareBasket.config.webshare %}
+                <button class="btn btn-primary btn-share-basket-webshare"
+                        data-share-title="{{ "frosh-share-basket.shareTitle"|trans }} {{ shopware.config.shopName }}"
+                        data-share-text=""
+                        data-share-url="{{ froshShareBasketUrl }}">
+                    <i class="fas fa-share-alt"></i> {{ "frosh-share-basket.webshare"|trans }}
+                </button>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

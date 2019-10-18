@@ -1,0 +1,25 @@
+.frosh-share-basket--buttons {
+    .btn-share-basket-whatsapp {
+        background-color: #32B322;
+        color: #FFF;
+
+        &:hover {
+            background-color: darken(#32B322, 10%);
+        }
+    }
+
+    .btn-share-basket-facebook {
+        background-color: #4B6FBD;
+        color: #FFF;
+
+        &:hover {
+            background-color: darken(#4B6FBD, 10%);
+        }
+    }
+
+    .btn-share-basket-webshare {
+        display: none;
+        background-color: #000;
+        color: #FFF;
+    }
+}

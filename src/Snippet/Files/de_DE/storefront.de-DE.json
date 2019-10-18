@@ -1,0 +1,16 @@
+{
+    "frosh-share-basket": {
+        "saveCart": "Warenkorb speichern",
+        "cartSaved": "Ihr Warenkorb wurde erfolgreich gespeichert. Nutzen Sie die Buttons um Ihren Warenkorb zu teilen.",
+        "cartError": "Ihr Warenkorb konnte nicht gespeichert werden.",
+        "cartLoaded": "Ihr Warenkorb wurde erfolgreich geladen.",
+        "cartNotFound": "Dieser Warenkorb existiert nicht mehr.",
+        "shareTitle": "Mein Warenkorb von",
+        "cartExists": "Nutzen Sie die Buttons um Ihren Warenkorb zu teilen.",
+        "copyUrl": "URL kopieren",
+        "email": "E-Mail",
+        "facebook": "Facebook",
+        "whatsapp": "WhatsApp",
+        "webshare": "Teilen ..."
+    }
+}

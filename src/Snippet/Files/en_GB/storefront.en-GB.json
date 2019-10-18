@@ -1,0 +1,16 @@
+{
+    "frosh-share-basket": {
+        "saveCart": "Save cart",
+        "cartSaved": "Your shopping cart has been saved successfully. Use the buttons to share your shopping cart.",
+        "cartError": "Your shopping cart could not be saved.",
+        "cartLoaded": "Your shopping cart has been successfully loaded.",
+        "cartNotFound": "This shopping cart no longer exists.",
+        "shareTitle": "My shopping cart from",
+        "cartExists": "Use the buttons to share your shopping cart.",
+        "copyUrl": "Copy URL",
+        "email": "E-Mail",
+        "facebook": "Facebook",
+        "whatsapp": "WhatsApp",
+        "webshare": "Share ..."
+    }
+}
