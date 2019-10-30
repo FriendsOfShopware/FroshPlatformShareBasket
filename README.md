@@ -1,4 +1,4 @@
-# [WIP] FroshShareBasket
+# [WIP] FroshPlatformShareBasket
 
 [![Join the chat at https://gitter.im/FriendsOfShopware/Lobby](https://badges.gitter.im/FriendsOfShopware/Lobby.svg)](https://gitter.im/FriendsOfShopware/Lobby)
 
