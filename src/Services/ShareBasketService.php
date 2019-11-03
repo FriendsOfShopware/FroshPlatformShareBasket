@@ -5,6 +5,7 @@ namespace Frosh\ShareBasket\Services;
 use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketDefinition;
 use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketEntity;
 use Shopware\Core\Checkout\Cart\Cart;
+use Shopware\Core\Checkout\Cart\Error\Error;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Checkout\Cart\LineItem\LineItemCollection;
 use Shopware\Core\Checkout\Cart\SalesChannel\CartService;
@@ -18,9 +19,10 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Translation\DataCollectorTranslator;
 
 class ShareBasketService implements ShareBasketServiceInterface
 {
@@ -55,22 +57,29 @@ class ShareBasketService implements ShareBasketServiceInterface
     private $router;
 
     /**
-     * @var SessionInterface
+     * @var Session
      */
     private $session;
+
+    /**
+     * @var DataCollectorTranslator
+     */
+    private $dataCollectorTranslator;
 
     public function __construct(
         SystemConfigService $systemConfigService,
         CartService $cartService,
         EntityRepositoryInterface $repository,
         RequestStack $requestStack,
-        RouterInterface $router
+        RouterInterface $router,
+        DataCollectorTranslator $dataCollectorTranslator
     ) {
         $this->systemConfigService = $systemConfigService;
         $this->cartService = $cartService;
         $this->repository = $repository;
         $this->requestStack = $requestStack;
         $this->router = $router;
+        $this->dataCollectorTranslator = $dataCollectorTranslator;
     }
 
     /**
@@ -78,8 +87,10 @@ class ShareBasketService implements ShareBasketServiceInterface
      */
     public function saveCart(SalesChannelContext $context)
     {
+        $this->context = $context;
         $master = $this->requestStack->getMasterRequest();
-        if (!$master) {
+
+        if ($master === null) {
             return false;
         }
 
@@ -88,19 +99,19 @@ class ShareBasketService implements ShareBasketServiceInterface
         }
 
         $this->session = $master->getSession();
-        $this->context = $context;
-        $data = $this->prepareLineItems($context);
+        $data = $this->prepareLineItems($this->context);
 
         try {
             $criteria = new Criteria();
         } catch (InconsistentCriteriaIdsException $e) {
             return false;
         }
-        $criteria->addFilter(new EqualsFilter('salesChannelId', $context->getSalesChannel()->getId()));
+
+        $criteria->addFilter(new EqualsFilter('salesChannelId', $this->context->getSalesChannel()->getId()));
         $criteria->addFilter(new EqualsFilter('hash', $data['hash']));
 
         /** @var ShareBasketEntity $shareBasketEntity */
-        $shareBasketEntity = $this->repository->search($criteria, $context->getContext())->first();
+        $shareBasketEntity = $this->repository->search($criteria, $this->context->getContext())->first();
 
         if ($shareBasketEntity instanceof ShareBasketEntity) {
             $data['id'] = $shareBasketEntity->getId();
@@ -125,20 +136,20 @@ class ShareBasketService implements ShareBasketServiceInterface
      */
     public function loadCart(SalesChannelContext $context)
     {
-        $master = $this->requestStack->getMasterRequest();
-        if (!$master) {
-            return false;
-        }
-        $session = $master->getSession();
-        if (!$session) {
-            return false;
-        }
-
-        if (!$master->get('basketId')) {
-            return false;
-        }
-
         $this->context = $context;
+        $master = $this->requestStack->getMasterRequest();
+
+        if ($master === null) {
+            return false;
+        }
+
+        if ($master->getSession() === null) {
+            return false;
+        }
+
+        if ($master->get('basketId') === null) {
+            return false;
+        }
 
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('salesChannelId', $context->getSalesChannel()->getId()));
@@ -152,17 +163,17 @@ class ShareBasketService implements ShareBasketServiceInterface
             return false;
         }
 
-        $session->set('froshShareBasketHash', $shareBasketEntity->getHash());
+        $this->session = $master->getSession();
+        $this->session->set('froshShareBasketHash', $shareBasketEntity->getHash());
 
         $token = $master->request->getAlnum('token', $context->getToken());
         $name = $master->request->getAlnum('name', CartService::SALES_CHANNEL);
+
         $this->cartService->createNew($token, $name);
-
         $cart = $this->cartService->getCart($context->getToken(), $context);
-
         $cart->addLineItems($this->collectLineItems($shareBasketEntity));
 
-        return $this->cartService->recalculate($cart, $context);
+        return $this->traceErrors($this->cartService->recalculate($cart, $context));
     }
 
     public function prepareLineItems(SalesChannelContext $context): array
@@ -276,5 +287,33 @@ class ShareBasketService implements ShareBasketServiceInterface
         }
 
         return $basketId;
+    }
+
+    private function traceErrors(Cart $cart): Cart
+    {
+        if ($cart->getErrors()->count() <= 0) {
+            return $cart;
+        }
+
+        foreach ($cart->getErrors() as $error) {
+            $type = 'danger';
+
+            if ($error->getLevel() === Error::LEVEL_NOTICE) {
+                $type = 'info';
+            }
+
+            $parameters = [];
+            foreach ($error->getParameters() as $key => $value) {
+                $parameters['%' . $key . '%'] = $value;
+            }
+
+            $message = $this->dataCollectorTranslator->trans('checkout.' . $error->getMessageKey(), $parameters);
+
+            $this->session->getFlashBag()->add($type, $message);
+        }
+
+        $cart->getErrors()->clear();
+
+        return $cart;
     }
 }

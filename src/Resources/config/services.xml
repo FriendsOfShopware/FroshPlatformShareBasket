@@ -14,22 +14,20 @@
             <tag name="shopware.entity.definition" entity="frosh_share_basket_line_item"/>
         </service>
 
-        <service class="Frosh\ShareBasket\Services\ShareBasketService"
-                 id="Frosh\ShareBasket\Services\ShareBasketService">
+        <service id="Frosh\ShareBasket\Services\ShareBasketService">
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
             <argument id="Shopware\Core\Checkout\Cart\SalesChannel\CartService" type="service"/>
             <argument id="frosh_share_basket.repository" type="service"/>
             <argument id="request_stack" type="service"/>
             <argument id="Shopware\Storefront\Framework\Routing\Router" type="service"/>
+            <argument id="translator.data_collector" type="service"/>
         </service>
 
-        <service class="Frosh\ShareBasket\ScheduledTask\ShareBasketCleanup"
-                 id="frosh.share_basket.scheduled_task.share_basket_cleanup">
+        <service id="Frosh\ShareBasket\ScheduledTask\ShareBasketCleanup">
             <tag name="shopware.scheduled.task"/>
         </service>
 
-        <service class="Frosh\ShareBasket\ScheduledTask\ShareBasketCleanupHandler"
-                 id="frosh.share_basket.scheduled_task.share_basket_cleanup_handler">
+        <service id="Frosh\ShareBasket\ScheduledTask\ShareBasketCleanupHandler">
             <argument type="service" id="scheduled_task.repository"/>
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
             <argument id="frosh_share_basket.repository" type="service"/>
@@ -43,8 +41,7 @@
             </call>
         </service>
 
-        <service class="Frosh\ShareBasket\Storefront\Page\Checkout\Cart\Subscriber\CheckoutPageSubscriber"
-                 id="Frosh\ShareBasket\Storefront\Page\Checkout\Cart\Subscriber\CheckoutPageSubscriber">
+        <service id="Frosh\ShareBasket\Storefront\Page\Checkout\Cart\Subscriber\CheckoutPageSubscriber">
             <argument id="Frosh\ShareBasket\Services\ShareBasketService" type="service"/>
             <tag name="kernel.event_subscriber"/>
         </service>
