@@ -20,6 +20,7 @@
             <argument id="frosh_share_basket.repository" type="service"/>
             <argument id="request_stack" type="service"/>
             <argument id="Shopware\Storefront\Framework\Routing\Router" type="service"/>
+            <argument id="session" type="service"/>
             <argument id="translator.data_collector" type="service"/>
         </service>
 

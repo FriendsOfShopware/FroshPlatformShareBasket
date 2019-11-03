@@ -11,6 +11,7 @@ use Shopware\Core\Checkout\Cart\LineItem\LineItemCollection;
 use Shopware\Core\Checkout\Cart\SalesChannel\CartService;
 use Shopware\Core\Checkout\Promotion\Cart\PromotionItemBuilder;
 use Shopware\Core\Checkout\Promotion\Cart\PromotionProcessor;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
@@ -42,11 +43,6 @@ class ShareBasketService implements ShareBasketServiceInterface
     private $repository;
 
     /**
-     * @var SalesChannelContext
-     */
-    private $context;
-
-    /**
      * @var RequestStack
      */
     private $requestStack;
@@ -72,6 +68,7 @@ class ShareBasketService implements ShareBasketServiceInterface
         EntityRepositoryInterface $repository,
         RequestStack $requestStack,
         RouterInterface $router,
+        Session $session,
         DataCollectorTranslator $dataCollectorTranslator
     ) {
         $this->systemConfigService = $systemConfigService;
@@ -79,27 +76,16 @@ class ShareBasketService implements ShareBasketServiceInterface
         $this->repository = $repository;
         $this->requestStack = $requestStack;
         $this->router = $router;
+        $this->session = $session;
         $this->dataCollectorTranslator = $dataCollectorTranslator;
     }
 
     /**
      * @return bool|string
      */
-    public function saveCart(SalesChannelContext $context)
+    public function saveCart(SalesChannelContext $salesChannelContext)
     {
-        $this->context = $context;
-        $master = $this->requestStack->getMasterRequest();
-
-        if ($master === null) {
-            return false;
-        }
-
-        if ($master->getSession() === null) {
-            return false;
-        }
-
-        $this->session = $master->getSession();
-        $data = $this->prepareLineItems($this->context);
+        $data = $this->prepareLineItems($salesChannelContext);
 
         try {
             $criteria = new Criteria();
@@ -107,11 +93,11 @@ class ShareBasketService implements ShareBasketServiceInterface
             return false;
         }
 
-        $criteria->addFilter(new EqualsFilter('salesChannelId', $this->context->getSalesChannel()->getId()));
+        $criteria->addFilter(new EqualsFilter('salesChannelId', $salesChannelContext->getSalesChannel()->getId()));
         $criteria->addFilter(new EqualsFilter('hash', $data['hash']));
 
         /** @var ShareBasketEntity $shareBasketEntity */
-        $shareBasketEntity = $this->repository->search($criteria, $this->context->getContext())->first();
+        $shareBasketEntity = $this->repository->search($criteria, $salesChannelContext->getContext())->first();
 
         if ($shareBasketEntity instanceof ShareBasketEntity) {
             $data['id'] = $shareBasketEntity->getId();
@@ -121,12 +107,12 @@ class ShareBasketService implements ShareBasketServiceInterface
             }
 
             unset($data['lineItems']);
-            $this->repository->update([$data], $this->context->getContext());
+            $this->repository->update([$data], $salesChannelContext->getContext());
 
             return $this->generateBasketUrl($data['basketId']);
         }
 
-        return $this->persistCart($data);
+        return $this->persistCart($salesChannelContext->getContext(), $data);
     }
 
     /**
@@ -134,51 +120,45 @@ class ShareBasketService implements ShareBasketServiceInterface
      *
      * @return bool|Cart
      */
-    public function loadCart(SalesChannelContext $context)
+    public function loadCart(SalesChannelContext $salesChannelContext)
     {
-        $this->context = $context;
-        $master = $this->requestStack->getMasterRequest();
+        $currentRequest = $this->requestStack->getCurrentRequest();
 
-        if ($master === null) {
+        if ($currentRequest === null) {
             return false;
         }
 
-        if ($master->getSession() === null) {
-            return false;
-        }
-
-        if ($master->get('basketId') === null) {
+        if ($currentRequest->get('basketId') === null) {
             return false;
         }
 
         $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('salesChannelId', $context->getSalesChannel()->getId()));
-        $criteria->addFilter(new EqualsFilter('basketId', $master->get('basketId')));
+        $criteria->addFilter(new EqualsFilter('salesChannelId', $salesChannelContext->getSalesChannel()->getId()));
+        $criteria->addFilter(new EqualsFilter('basketId', $currentRequest->get('basketId')));
         $criteria->addAssociation('lineItems');
 
         /** @var ShareBasketEntity|null $shareBasketEntity */
-        $shareBasketEntity = $this->repository->search($criteria, $context->getContext())->first();
+        $shareBasketEntity = $this->repository->search($criteria, $salesChannelContext->getContext())->first();
 
         if (!$shareBasketEntity instanceof ShareBasketEntity) {
             return false;
         }
 
-        $this->session = $master->getSession();
         $this->session->set('froshShareBasketHash', $shareBasketEntity->getHash());
 
-        $token = $master->request->getAlnum('token', $context->getToken());
-        $name = $master->request->getAlnum('name', CartService::SALES_CHANNEL);
+        $token = $currentRequest->request->getAlnum('token', $salesChannelContext->getToken());
+        $name = $currentRequest->request->getAlnum('name', CartService::SALES_CHANNEL);
 
         $this->cartService->createNew($token, $name);
-        $cart = $this->cartService->getCart($context->getToken(), $context);
-        $cart->addLineItems($this->collectLineItems($shareBasketEntity));
+        $cart = $this->cartService->getCart($salesChannelContext->getToken(), $salesChannelContext);
+        $cart->addLineItems($this->collectLineItems($salesChannelContext, $shareBasketEntity));
 
-        return $this->traceErrors($this->cartService->recalculate($cart, $context));
+        return $this->traceErrors($this->cartService->recalculate($cart, $salesChannelContext));
     }
 
-    public function prepareLineItems(SalesChannelContext $context): array
+    public function prepareLineItems(SalesChannelContext $salesChannelContext): array
     {
-        $cart = $this->cartService->getCart($context->getToken(), $context);
+        $cart = $this->cartService->getCart($salesChannelContext->getToken(), $salesChannelContext);
 
         $lineItems = [];
         foreach ($cart->getLineItems() as $lineItem) {
@@ -198,7 +178,7 @@ class ShareBasketService implements ShareBasketServiceInterface
         $data = [
             'basketId' => $this->generateShareBasketId(),
             'hash' => sha1(serialize($lineItems)),
-            'salesChannelId' => $context->getSalesChannel()->getId(),
+            'salesChannelId' => $salesChannelContext->getSalesChannel()->getId(),
             'lineItems' => $lineItems,
         ];
 
@@ -208,7 +188,7 @@ class ShareBasketService implements ShareBasketServiceInterface
     /**
      * @throws \Exception
      */
-    private function collectLineItems(ShareBasketEntity $shareBasketEntity): LineItemCollection
+    private function collectLineItems(SalesChannelContext $salesChannelContext, ShareBasketEntity $shareBasketEntity): LineItemCollection
     {
         $collection = new LineItemCollection();
         foreach ($shareBasketEntity->getLineItems() as $shareBasketLineItemEntity) {
@@ -216,7 +196,7 @@ class ShareBasketService implements ShareBasketServiceInterface
                 $itemBuilder = new PromotionItemBuilder();
                 $lineItem = $itemBuilder->buildPlaceholderItem(
                     $shareBasketLineItemEntity->getIdentifier(),
-                    $this->context->getContext()->getCurrencyPrecision()
+                    $salesChannelContext->getContext()->getCurrencyPrecision()
                 );
             } else {
                 $lineItem = new LineItem(
@@ -239,7 +219,7 @@ class ShareBasketService implements ShareBasketServiceInterface
     /**
      * @return bool|string
      */
-    private function persistCart(array $data, int $attempts = 0)
+    private function persistCart(Context $context, array $data, int $attempts = 0)
     {
         if ($attempts > 3) {
             return false;
@@ -247,11 +227,11 @@ class ShareBasketService implements ShareBasketServiceInterface
 
         try {
             /** @var EntityWrittenContainerEvent $result */
-            $result = $this->repository->create([$data], $this->context->getContext());
+            $result = $this->repository->create([$data], $context);
         } catch (\Exception $e) {
             $data['basketId'] = $this->generateShareBasketId();
 
-            return $this->persistCart($data, ++$attempts);
+            return $this->persistCart($context, $data, ++$attempts);
         }
 
         $event = $result->getEventByEntityName(ShareBasketDefinition::ENTITY_NAME);
