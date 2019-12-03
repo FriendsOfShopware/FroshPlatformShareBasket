@@ -2,7 +2,7 @@
 
 namespace Frosh\ShareBasket\Snippet\Files\de_DE;
 
-use Shopware\Core\Framework\Snippet\Files\SnippetFileInterface;
+use Shopware\Core\System\Snippet\Files\SnippetFileInterface;
 
 class SnippetFile_de_DE implements SnippetFileInterface
 {

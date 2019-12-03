@@ -27,8 +27,7 @@ class CheckoutPageSubscriber implements EventSubscriberInterface
 
     public function onCartLoaded(CheckoutCartPageLoadedEvent $event): void
     {
-        $session = $event->getRequest()->getSession();
-        if (!$session) {
+        if (!$event->getRequest()->hasSession()) {
             return;
         }
 
@@ -40,6 +39,7 @@ class CheckoutPageSubscriber implements EventSubscriberInterface
             return;
         }
 
+        $session = $event->getRequest()->getSession();
         if ($hash = $session->get('froshShareBasketHash')) {
             $shareBasketData = $this->shareBasketService->prepareLineItems($event->getSalesChannelContext());
             if ($hash === $shareBasketData['hash']) {

@@ -3,7 +3,7 @@
 
         {% if froshShareBasketState is defined %}
             {% set snippetName = "frosh-share-basket.#{froshShareBasketState}" %}
-            {% sw_include '@Storefront/utilities/alert.html.twig' with {
+            {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
                 type: "info",
                 content: snippetName|trans
             } %}

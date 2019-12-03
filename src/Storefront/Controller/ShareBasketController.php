@@ -38,7 +38,7 @@ class ShareBasketController extends StorefrontController
         }
 
         return $this->renderStorefront(
-            '@Storefront/utilities/frosh-share-basket.html.twig',
+            '@Storefront/storefront/utilities/frosh-share-basket.html.twig',
             [
                 'froshShareBasketState' => $froshShareBasketState,
                 'froshShareBasketUrl' => $froshShareBasketUrl,

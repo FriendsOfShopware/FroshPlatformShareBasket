@@ -2,7 +2,7 @@
 
 namespace Frosh\ShareBasket\ScheduledTask;
 
-use Shopware\Core\Framework\ScheduledTask\ScheduledTask;
+use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 
 class ShareBasketCleanup extends ScheduledTask
 {
@@ -13,6 +13,6 @@ class ShareBasketCleanup extends ScheduledTask
 
     public static function getDefaultInterval(): int
     {
-        return 60 * 60 * 24;
+        return 86400; // 1 day
     }
 }

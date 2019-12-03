@@ -42,6 +42,12 @@
             </call>
         </service>
 
+        <service id="Frosh\ShareBasket\Controller\ShareBasketController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
         <service id="Frosh\ShareBasket\Storefront\Page\Checkout\Cart\Subscriber\CheckoutPageSubscriber">
             <argument id="Frosh\ShareBasket\Services\ShareBasketService" type="service"/>
             <tag name="kernel.event_subscriber"/>

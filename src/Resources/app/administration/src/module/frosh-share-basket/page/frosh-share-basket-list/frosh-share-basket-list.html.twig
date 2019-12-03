@@ -1,0 +1,59 @@
+{% block frosh_share_basket_list %}
+    <sw-page class="frosh-share-basket-list">
+        <template slot="content">
+            {% block frosh_share_basket_list_content %}
+                <sw-entity-listing
+                    v-if="items"
+                    :items="items"
+                    :repository="repository"
+                    :showSelection="false"
+                    :columns="columns">
+                </sw-entity-listing>
+            {% endblock %}
+        </template>
+
+        {% block sw_newsletter_recipient_list_sidebar %}
+        <sw-sidebar slot="sidebar">
+            {% block sw_newsletter_recipient_list_sidebar_refresh %}
+                <sw-sidebar-item
+                    icon="default-arrow-360-left"
+                    :title="$tc('frosh-share-basket.list.titleSidebarItemRefresh')"
+                    @click="onRefresh">
+                </sw-sidebar-item>
+            {% endblock %}
+
+            {% block frosh_share_basket_list_sidebar %}
+            <sw-sidebar-item
+                ref="filterSideBar"
+                icon="default-action-filter"
+                :title="$tc('frosh-share-basket.list.titleSidebarItemFilter')"
+                @sw-sidebar-item-close-content="closeContent"
+                @click="closeContent">
+
+                {% block frosh_share_basket_list_sidebar_filter_sales_channel %}
+                <sw-sidebar-collapse>
+                    <template slot="header">{{ $tc('frosh-share-basket.general.salesChannel') }}</template>
+                    <template slot="content">
+                        {% block frosh_share_basket_list_sidebar_filter_sales_channel_items %}
+                        <div v-for="(item, index) in salesChannelFilters">
+                            <sw-newsletter-recipient-filter-switch
+                                :id="item.id"
+                                group="salesChannelId"
+                                :label="item.translated.name"
+                                @change="onChange">
+                            </sw-newsletter-recipient-filter-switch>
+                        </div>
+                        {% endblock %}
+                    </template>
+                </sw-sidebar-collapse>
+                {% endblock %}
+
+
+            </sw-sidebar-item>
+            {% endblock %}
+
+        </sw-sidebar>
+        {% endblock %}
+
+    </sw-page>
+{% endblock %}

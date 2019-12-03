@@ -13,7 +13,6 @@ use Shopware\Core\Checkout\Promotion\Cart\PromotionItemBuilder;
 use Shopware\Core\Checkout\Promotion\Cart\PromotionProcessor;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
-use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -226,7 +225,6 @@ class ShareBasketService implements ShareBasketServiceInterface
         }
 
         try {
-            /** @var EntityWrittenContainerEvent $result */
             $result = $this->repository->create([$data], $context);
         } catch (\Exception $e) {
             $data['basketId'] = $this->generateShareBasketId();

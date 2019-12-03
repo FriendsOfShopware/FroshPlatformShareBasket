@@ -10,7 +10,7 @@ use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
-class ShareBasket extends Plugin
+class FroshPlatformShareBasket extends Plugin
 {
     public function install(InstallContext $context): void
     {

@@ -10,13 +10,11 @@
             "homepage": "https://friendsofshopware.de"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "Frosh\\ShareBasket\\": "src/"
-        }
+    "require": {
+        "shopware/core": "*"
     },
     "extra": {
-        "shopware-plugin-class": "Frosh\\ShareBasket\\ShareBasket",
+        "shopware-plugin-class": "Frosh\\ShareBasket\\FroshPlatformShareBasket",
         "copyright": "FriendsOfShopware",
         "label": {
             "de-DE": "Warenkorb teilen",
@@ -26,5 +24,18 @@
             "de-DE": "Shopware Plugin, um Ihren Warenkorb zu teilen.",
             "en-GB": "Shopware Plugin to share your basket."
         }
+    },
+    "autoload": {
+        "psr-4": {
+            "Frosh\\ShareBasket\\": "src/"
+        }
+    },
+    "suggest": {
+        "shopware/storefront": "Require '*'.",
+        "shopware/administration": "Require '*'."
+    },
+    "conflict": {
+        "shopware/storefront": "<6,>=7",
+        "shopware/administration": "<6,>=7"
     }
 }

@@ -14,7 +14,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField
 use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Shopware\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Shopware\Core\System\SalesChannel\SalesChannelDefinition;
 
 class ShareBasketDefinition extends EntityDefinition
@@ -36,12 +35,8 @@ class ShareBasketDefinition extends EntityDefinition
         return ShareBasketEntity::class;
     }
 
-    public function getDefaults(EntityExistence $existence): array
+    public function getDefaults(): array
     {
-        if ($existence->exists()) {
-            return [];
-        }
-
         return [
             'saveCount' => 1,
         ];

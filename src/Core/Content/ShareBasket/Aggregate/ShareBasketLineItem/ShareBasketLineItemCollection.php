@@ -6,10 +6,10 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 
 /**
  * @method void                           add(ShareBasketLineItemEntity $entity)
- * @method void                           set(string $basketId, ShareBasketLineItemEntity $entity)
+ * @method void                           set(string $key, ShareBasketLineItemEntity $entity)
  * @method ShareBasketLineItemEntity[]    getIterator()
  * @method ShareBasketLineItemEntity[]    getElements()
- * @method ShareBasketLineItemEntity|null get(string $basketId)
+ * @method ShareBasketLineItemEntity|null get(string $key)
  * @method ShareBasketLineItemEntity|null first()
  * @method ShareBasketLineItemEntity|null last()
  */

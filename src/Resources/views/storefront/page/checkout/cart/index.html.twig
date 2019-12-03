@@ -1,4 +1,4 @@
-{% sw_extends '@Storefront/page/checkout/cart/index.html.twig' %}
+{% sw_extends '@Storefront/storefront/page/checkout/cart/index.html.twig' %}
 
 {% block page_checkout_cart_product_table %}
     <div class="container mb-3">
@@ -7,7 +7,7 @@
 
                 {% if page.froshShareBasketState == 'cartExists' %}
 
-                    {% sw_include '@Storefront/utilities/frosh-share-basket.html.twig' with {
+                    {% sw_include '@Storefront/storefront/utilities/frosh-share-basket.html.twig' with {
                         froshShareBasketUrl: page.froshShareBasketUrl,
                         froshShareBasketState: page.froshShareBasketState,
                     } %}
@@ -23,6 +23,11 @@
                                 "replaceSelectors": ".js-frosh-share-basket-container",
                                 "submitOnce": true
                               }'>
+
+                            {% block page_checkout_cart_product_table_share_basket_csrf %}
+                                {{ sw_csrf('frontend.frosh.share-basket.save') }}
+                            {% endblock %}
+
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> {{ "frosh-share-basket.saveCart"|trans }}
                             </button>

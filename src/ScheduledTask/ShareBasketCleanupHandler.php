@@ -2,14 +2,12 @@
 
 namespace Frosh\ShareBasket\ScheduledTask;
 
-use Nette\Utils\DateTime;
-use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
-use Shopware\Core\Framework\ScheduledTask\ScheduledTaskHandler;
+use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class ShareBasketCleanupHandler extends ScheduledTaskHandler
@@ -36,7 +34,9 @@ class ShareBasketCleanupHandler extends ScheduledTaskHandler
 
     public static function getHandledMessages(): iterable
     {
-        return [ShareBasketCleanup::class];
+        return [
+            ShareBasketCleanup::class,
+        ];
     }
 
     /**
@@ -44,21 +44,27 @@ class ShareBasketCleanupHandler extends ScheduledTaskHandler
      */
     public function run(): void
     {
-        $context = Context::createDefaultContext();
         $interval = -1 * abs($this->systemConfigService->get('ShareBasket.config.interval') ?: 6);
-
-        $deleteBefore = new DateTime();
-        $deleteBefore->modify($interval . ' months');
+        $dateTime = (new \DateTime())->add(\DateInterval::createFromDateString($interval . ' months'));
 
         $criteria = new Criteria();
-        $criteria->addFilter(
-            new RangeFilter('created_at', [
-                'lt' => $deleteBefore->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-            ])
-        );
+        $criteria->addFilter(new RangeFilter(
+            'createdAt',
+            [
+                RangeFilter::LTE => $dateTime->format(DATE_ATOM),
+            ]
+        ));
+
         $criteria->addAssociation('lineItems');
 
-        $shareBasketEntities = $this->repository->search($criteria, $context)->getIds();
-        $this->repository->delete($shareBasketEntities, $context);
+        $shareBasketEntities = $this->repository->search($criteria, Context::createDefaultContext());
+
+        if (empty($shareBasketEntities->getIds())) {
+            return;
+        }
+
+        $shareBasketEntitiesIds = array_map(function ($id) {return ['id' => $id]; }, $shareBasketEntities->getIds());
+
+        $this->repository->delete($shareBasketEntitiesIds, Context::createDefaultContext());
     }
 }

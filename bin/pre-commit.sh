@@ -32,6 +32,7 @@ then
 
     php "`dirname \"$0\"`"/../../bin/phpstan-config-generator.php
     php ../../../dev-ops/analyze/vendor/bin/phpstan analyze --no-progress --configuration phpstan.neon --autoload-file="$AUTOLOAD_FILE" ${PHP_FILES}
+    php ../../../dev-ops/analyze/vendor/bin/psalm --config=psalm.xml --show-info=false ${PHP_FILES}
 fi
 
 UNSTAGED_FILES="$(git diff --name-only -- ${PHP_FILES} ${JS_FILES})"
@@ -39,9 +40,7 @@ UNSTAGED_FILES="$(git diff --name-only -- ${PHP_FILES} ${JS_FILES})"
 if [[ -n "$UNSTAGED_FILES" ]]
 then
     echo "Error: There are staged files with unstaged changes. We cannot automatically fix and add those.
-
 Please add or revert the following files:
-
 $UNSTAGED_FILES
 "
     exit 1
@@ -53,9 +52,9 @@ then
     php ../../../dev-ops/analyze/vendor/bin/php-cs-fixer fix --config=../../../vendor/shopware/platform/.php_cs.dist --quiet -vv ${PHP_FILES}
 fi
 
-if [[ -n "$JS_FILES" && -x ../../../vendor/shopware/platform/src/Administration/Resources/administration/node_modules/.bin/eslint ]]
+if [[ -n "$JS_FILES" && -x ../../../vendor/shopware/platform/src/Administration/Resources/app/administration/node_modules/.bin/eslint ]]
 then
-    ../../../vendor/shopware/platform/src/Administration/Resources/administration/node_modules/.bin/eslint --config ../../../vendor/shopware/platform/src/Administration/Resources/administration/.eslintrc.js --ext .js,.vue --fix ${JS_FILES}
+    ../../../vendor/shopware/platform/src/Administration/Resources/app/administration/node_modules/.bin/eslint --config ../../../vendor/shopware/platform/src/Administration/Resources/app/administration/.eslintrc.js --ext .js,.vue --fix ${JS_FILES}
 fi
 
 git add ${JS_FILES} ${PHP_FILES}
