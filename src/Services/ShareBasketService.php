@@ -174,14 +174,12 @@ class ShareBasketService implements ShareBasketServiceInterface
             ];
         }
 
-        $data = [
+        return [
             'basketId' => $this->generateShareBasketId(),
             'hash' => sha1(serialize($lineItems)),
             'salesChannelId' => $salesChannelContext->getSalesChannel()->getId(),
             'lineItems' => $lineItems,
         ];
-
-        return $data;
     }
 
     /**
