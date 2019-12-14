@@ -21,28 +21,28 @@
                 <input type="text" id="share-basket-url" class="form-control" value="{{ froshShareBasketUrl }}">
             </div>
 
-            {% if shopware.config.ShareBasket.config.email %}
+            {% if shopware.config.FroshPlatformShareBasket.config.email %}
                 <a class="btn btn-primary btn-share-basket-email"
                    target="_blank"
                    href="mailto:%20?subject={{ "frosh-share-basket.shareTitle"|trans }}%20{{ shopware.config.shopName }}&body={{ froshShareBasketUrl }}">
                     <i class="fas fa-envelope"></i> {{ "frosh-share-basket.email"|trans }}
                 </a>
             {% endif %}
-            {% if shopware.config.ShareBasket.config.facebook %}
+            {% if shopware.config.FroshPlatformShareBasket.config.facebook %}
                 <a class="btn btn-primary btn-share-basket-facebook"
                    target="_blank"
                    href="https://www.facebook.com/sharer/sharer.php?quote={{ "frosh-share-basket.shareTitle"|trans }} {{ shopware.config.shopName }}&u={{ froshShareBasketUrl }}">
                     <i class="fab fa-facebook-f"></i> {{ "frosh-share-basket.facebook"|trans }}
                 </a>
             {% endif %}
-            {% if shopware.config.ShareBasket.config.whatsapp %}
+            {% if shopware.config.FroshPlatformShareBasket.config.whatsapp %}
                 <a class="btn btn-primary btn-share-basket-whatsapp"
                    target="_blank"
                    href="https://api.whatsapp.com/send?text={{ "frosh-share-basket.shareTitle"|trans }} {{ shopware.config.shopName }} {{ froshShareBasketUrl }}">
                     <i class="fab fa-whatsapp"></i> {{ "frosh-share-basket.whatsapp"|trans }}
                 </a>
             {% endif %}
-            {% if shopware.config.ShareBasket.config.webshare %}
+            {% if shopware.config.FroshPlatformShareBasket.config.webshare %}
                 <button class="btn btn-primary btn-share-basket-webshare"
                         data-share-title="{{ "frosh-share-basket.shareTitle"|trans }} {{ shopware.config.shopName }}"
                         data-share-text=""
