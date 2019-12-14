@@ -7,6 +7,7 @@
         <title lang="de-DE">Warenkorb teilen</title>
         <input-field type="int">
             <name>interval</name>
+            <defaultValue>6</defaultValue>
             <label>Delete baskets after X months</label>
             <label lang="de-DE">Warenkörbe nach X Monaten löschen</label>
             <description >Baskets older than X months are deleted by cronjob. Cronjob Shopware_CronJob_ShareBasketCleanup must be active.</description>
@@ -15,29 +16,32 @@
 
         <input-field type="bool">
             <name>email</name>
+            <defaultValue>true</defaultValue>
             <label>E-Mail Share</label>
             <label lang="de-DE">E-Mail Share</label>
         </input-field>
 
         <input-field type="bool">
             <name>facebook</name>
+            <defaultValue>true</defaultValue>
             <label>Facebook Share</label>
             <label lang="de-DE">Facebook Share</label>
         </input-field>
 
         <input-field type="bool">
             <name>whatsapp</name>
+            <defaultValue>true</defaultValue>
             <label>WhatsApp Share</label>
             <label lang="de-DE">WhatsApp Share</label>
         </input-field>
 
         <input-field type="bool">
             <name>webshare</name>
+            <defaultValue>true</defaultValue>
             <label>Web Share</label>
             <label lang="de-DE">Web Share</label>
             <description>Enables the native sharing feature on supported devices.</description>
             <description lang="de-DE">Aktiviert die native Teilen-Funktion auf unterstützten Endgeräten.</description>
         </input-field>
-
     </card>
 </config>
