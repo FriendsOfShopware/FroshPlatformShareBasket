@@ -37,6 +37,6 @@ class ShareBasketController extends AbstractController
 
         $result = $repository->search($criteria, $context);
 
-        return $responseFactory->createListingResponse($result, $repository->getDefinition(), $request, $context);
+        return $responseFactory->createListingResponse($criteria, $result, $repository->getDefinition(), $request, $context);
     }
 }
