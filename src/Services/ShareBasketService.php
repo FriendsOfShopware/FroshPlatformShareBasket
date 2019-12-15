@@ -17,7 +17,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaI
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
-use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -26,11 +25,6 @@ use Symfony\Component\Translation\DataCollectorTranslator;
 
 class ShareBasketService implements ShareBasketServiceInterface
 {
-    /**
-     * @var SystemConfigService
-     */
-    private $systemConfigService;
-
     /**
      * @var CartService
      */
@@ -62,7 +56,6 @@ class ShareBasketService implements ShareBasketServiceInterface
     private $dataCollectorTranslator;
 
     public function __construct(
-        SystemConfigService $systemConfigService,
         CartService $cartService,
         EntityRepositoryInterface $repository,
         RequestStack $requestStack,
@@ -70,7 +63,6 @@ class ShareBasketService implements ShareBasketServiceInterface
         Session $session,
         DataCollectorTranslator $dataCollectorTranslator
     ) {
-        $this->systemConfigService = $systemConfigService;
         $this->cartService = $cartService;
         $this->repository = $repository;
         $this->requestStack = $requestStack;
@@ -107,6 +99,7 @@ class ShareBasketService implements ShareBasketServiceInterface
 
             unset($data['lineItems']);
             $this->repository->update([$data], $salesChannelContext->getContext());
+            $this->session->set('froshShareBasketHash', $data['hash']);
 
             return $this->generateBasketUrl($data['basketId']);
         }

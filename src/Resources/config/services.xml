@@ -15,7 +15,6 @@
         </service>
 
         <service id="Frosh\ShareBasket\Services\ShareBasketService">
-            <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
             <argument id="Shopware\Core\Checkout\Cart\SalesChannel\CartService" type="service"/>
             <argument id="frosh_share_basket.repository" type="service"/>
             <argument id="request_stack" type="service"/>
@@ -43,6 +42,7 @@
         </service>
 
         <service id="Frosh\ShareBasket\Controller\ShareBasketController" public="true">
+            <argument id="Doctrine\DBAL\Connection" type="service"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>

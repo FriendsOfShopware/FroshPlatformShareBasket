@@ -1,14 +1,17 @@
 {
     "frosh-share-basket": {
         "general": {
-            "mainMenuItemGeneral": "Artikel in gesp. Warenkörben",
-            "descriptionTextModule": "Übersicht der gespeicherten Artikel"
+            "salesChannel": "Sales channel",
+            "mainMenuItemGeneral": "Products in saved baskets",
+            "descriptionTextModule": "Overview of the saved products"
         },
         "list": {
-            "columnProductNumber": "Artikelnummer",
-            "columnProductName": "Artikel",
-            "columnProductSaveCount": "Gespeichert",
-            "columnProductQuantity": "Menge"
+            "titleSidebarItemRefresh": "Refresh",
+            "titleSidebarItemFilter": "Filter",
+            "columnProductNumber": "Product number",
+            "columnProductName": "Product",
+            "columnProductSaveCount": "Saved",
+            "columnProductQuantity": "Quantity"
         }
     }
 }

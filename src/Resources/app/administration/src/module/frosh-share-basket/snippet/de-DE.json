@@ -1,10 +1,13 @@
 {
     "frosh-share-basket": {
         "general": {
+            "salesChannel": "Verkaufskanal",
             "mainMenuItemGeneral": "Artikel in gesp. Warenkörben",
             "descriptionTextModule": "Übersicht der gespeicherten Artikel"
         },
         "list": {
+            "titleSidebarItemRefresh": "Aktualisieren",
+            "titleSidebarItemFilter": "Filter",
             "columnProductNumber": "Artikelnummer",
             "columnProductName": "Artikel",
             "columnProductSaveCount": "Gespeichert",

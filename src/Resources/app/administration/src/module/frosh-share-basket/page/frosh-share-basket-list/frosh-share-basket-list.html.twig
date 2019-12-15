@@ -1,14 +1,25 @@
 {% block frosh_share_basket_list %}
     <sw-page class="frosh-share-basket-list">
         <template slot="content">
-            {% block frosh_share_basket_list_content %}
-                <sw-entity-listing
+            {% block frosh_share_basket_list_grid %}
+                <sw-data-grid
                     v-if="items"
-                    :items="items"
-                    :repository="repository"
+                    :dataSource="items"
                     :showSelection="false"
+                    :showActions="false"
                     :columns="columns">
-                </sw-entity-listing>
+
+                    <template slot="pagination">
+                        {% block frosh_share_basket_list_grid_pagination %}
+                            <sw-pagination :page="page"
+                                           :limit="limit"
+                                           :total="total"
+                                           :total-visible="7"
+                                           @page-change="onPageChange">
+                            </sw-pagination>
+                        {% endblock %}
+                    </template>
+                </sw-data-grid>
             {% endblock %}
         </template>
 
@@ -38,7 +49,7 @@
                         <div v-for="(item, index) in salesChannelFilters">
                             <sw-newsletter-recipient-filter-switch
                                 :id="item.id"
-                                group="salesChannelId"
+                                group="sales_channel_id"
                                 :label="item.translated.name"
                                 @change="onChange">
                             </sw-newsletter-recipient-filter-switch>
@@ -47,7 +58,6 @@
                     </template>
                 </sw-sidebar-collapse>
                 {% endblock %}
-
 
             </sw-sidebar-item>
             {% endblock %}

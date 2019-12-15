@@ -7,7 +7,7 @@ const { Criteria } = Shopware.Data;
 Component.register('frosh-share-basket-list', {
     template,
 
-    inject: ['repositoryFactory', 'apiContext', 'syncService'],
+    inject: ['repositoryFactory', 'syncService', 'localeToLanguageService'],
 
     mixins: [
         Mixin.getByName('listing')
@@ -17,8 +17,8 @@ Component.register('frosh-share-basket-list', {
         return {
             isLoading: false,
             items: null,
+            languageId: localStorage.getItem('sw-admin-current-language'),
             total: 0,
-            repository: null,
             sortBy: 'saveCount',
             sortDirection: 'DESC',
             filterSidebarIsOpen: false,
@@ -36,12 +36,12 @@ Component.register('frosh-share-basket-list', {
     computed: {
         columns() {
             return [{
-                property: 'lineItems.identifier',
+                property: 'productNumber',
                 label: this.$t('frosh-share-basket.list.columnProductNumber'),
                 allowResize: true,
                 primary: true
             }, {
-                property: 'salesChannel.name',
+                property: 'productName',
                 label: this.$t('frosh-share-basket.list.columnProductName'),
                 allowResize: true
             }, {
@@ -49,14 +49,10 @@ Component.register('frosh-share-basket-list', {
                 label: this.$t('frosh-share-basket.list.columnProductSaveCount'),
                 allowResize: true
             }, {
-                property: 'lineItems.quantity',
+                property: 'totalQuantity',
                 label: this.$t('frosh-share-basket.list.columnProductQuantity'),
                 allowResize: true
             }];
-        },
-
-        languageStore() {
-            return this.repositoryFactory.create('language');
         },
 
         salesChannelStore() {
@@ -71,12 +67,16 @@ Component.register('frosh-share-basket-list', {
     methods: {
         createdComponent() {
             const criteria = new Criteria(1, 100);
+            const locale = localStorage.getItem('sw-admin-locale');
 
-            this.salesChannelStore.search(criteria, this.apiContext).then((items) => {
+            this.salesChannelStore.search(criteria, Shopware.Context.api).then((items) => {
                 this.salesChannelFilters = items;
             });
 
-            this.getList();
+            this.localeToLanguageService.localeToLanguage(locale).then((languageId) => {
+                this.languageId = languageId;
+                this.getList();
+            });
         },
 
         handleBooleanFilter(filter) {
@@ -123,8 +123,8 @@ Component.register('frosh-share-basket-list', {
         getList() {
             this.isLoading = true;
             const criteria = new Criteria(this.page, this.limit, this.term);
+            criteria.languageId = this.languageId;
             criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection));
-            criteria.addAssociation('salesChannel');
 
             Object.values(this.internalFilters).forEach((item) => {
                 criteria.addFilter(item);
@@ -137,10 +137,8 @@ Component.register('frosh-share-basket-list', {
                     headers: this.syncService.getBasicHeaders()
                 }
             ).then((result) => {
-                console.log(result);
                 this.items = result.data.data;
-                this.total = result.data.meta.total;
-
+                this.total = result.data.total;
                 this.isLoading = false;
             }).catch(() => {
                 this.isLoading = false;

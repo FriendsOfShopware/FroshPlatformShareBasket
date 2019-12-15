@@ -39,7 +39,7 @@ class ShareBasketLineItemDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
             (new FkField('cart_id', 'cartId', ShareBasketDefinition::class))->addFlags(new Required()),
-            (new StringField('identifier', 'identifier'))->addFlags(new Required()),
+            (new IdField('identifier', 'identifier'))->addFlags(new Required()),
             new IntField('quantity', 'quantity'),
             (new StringField('type', 'type'))->addFlags(new Required()),
             new CustomFields(),

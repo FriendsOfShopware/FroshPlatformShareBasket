@@ -1,8 +1,5 @@
 import './page/frosh-share-basket-list';
 
-import deDE from './snippet/de-DE.json';
-import enGB from './snippet/en-GB.json';
-
 const { Module } = Shopware;
 
 Module.register('frosh-share-basket', {
@@ -12,11 +9,6 @@ Module.register('frosh-share-basket', {
     description: 'frosh-share-basket.general.descriptionTextModule',
     color: '#079FDF',
     icon: 'default-shopping-paper-bag-product',
-
-    snippets: {
-        'de-DE': deDE,
-        'en-GB': enGB
-    },
 
     routes: {
         list: {

@@ -18,7 +18,7 @@ class Migration1558180775ShareBasketLineItem extends MigrationStep
 CREATE TABLE IF NOT EXISTS `frosh_share_basket_line_item` (
     `id` BINARY(16) NOT NULL,
     `cart_id` BINARY(16) NOT NULL,
-    `identifier` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `identifier` BINARY(16) NOT NULL,
     `type` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
     `quantity` INT(11) NOT NULL,
     `custom_fields` JSON NULL,
