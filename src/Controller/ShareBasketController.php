@@ -3,6 +3,7 @@
 namespace Frosh\ShareBasket\Controller;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Statement;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
@@ -37,6 +38,9 @@ class ShareBasketController extends AbstractController
         $page = $request->get('page');
         $limit = $request->get('limit');
         $offset = ($page - 1) * $limit;
+        $data = [];
+        $totalCount = 0;
+        $filters = [];
 
         $query = $this->connection->createQueryBuilder();
         $query->select(
@@ -87,16 +91,19 @@ class ShareBasketController extends AbstractController
             );
         }
 
-        /*
-         * TODO: fix statement
-         */
         foreach ($request->get('filters') as $condition) {
-            $query->andWhere($query->expr()->eq($condition['field'], ':' . $condition['value']));
-            $query->setParameter(':' . $condition['value'], Uuid::fromHexToBytes($condition['value']));
+            foreach (explode('|', $condition['value']) as $value) {
+                $parameter = $query->createNamedParameter(Uuid::fromHexToBytes($value));
+                $filters[] = $condition['field'] . ' = ' . $parameter;
+            }
         }
+        $query->andWhere($query->expr()->orX(...$filters));
 
-        $data = $query->execute()->fetchAll();
-        $totalCount = (int) $this->connection->fetchColumn('SELECT FOUND_ROWS()');
+        $statement = $query->execute();
+        if ($statement instanceof Statement) {
+            $data = $statement->fetchAll();
+            $totalCount = (int) $this->connection->fetchColumn('SELECT FOUND_ROWS()');
+        }
 
         return new JsonResponse([
             'total' => $totalCount,
