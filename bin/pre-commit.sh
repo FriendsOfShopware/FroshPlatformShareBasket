@@ -30,6 +30,7 @@ then
         php -l -d display_errors=0 "$FILE" 1> /dev/null
     done
 
+    composer dump-autoload
     php "`dirname \"$0\"`"/../../bin/phpstan-config-generator.php
     php ../../../dev-ops/analyze/vendor/bin/phpstan analyze --no-progress --configuration phpstan.neon --autoload-file="$AUTOLOAD_FILE" ${PHP_FILES}
     php ../../../dev-ops/analyze/vendor/bin/psalm --config=psalm.xml --show-info=false ${PHP_FILES}
@@ -40,7 +41,9 @@ UNSTAGED_FILES="$(git diff --name-only -- ${PHP_FILES} ${JS_FILES})"
 if [[ -n "$UNSTAGED_FILES" ]]
 then
     echo "Error: There are staged files with unstaged changes. We cannot automatically fix and add those.
+
 Please add or revert the following files:
+
 $UNSTAGED_FILES
 "
     exit 1
