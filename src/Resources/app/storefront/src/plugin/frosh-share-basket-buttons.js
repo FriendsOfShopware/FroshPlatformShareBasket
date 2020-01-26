@@ -7,7 +7,7 @@ export default class FroshShareBasketButtons extends Plugin {
     static options = {
         urlShareSelector: '.btn-share-basket-url',
         urlInputSelector: '#share-basket-url',
-        webShareSelector: '.btn-share-basket-webshare'
+        webShareSelector: '.btn-share-basket-webshare',
     };
 
     init() {
@@ -50,7 +50,7 @@ export default class FroshShareBasketButtons extends Plugin {
         navigator.share({
             title: shareTitle,
             text: shareText,
-            url: shareUrl
+            url: shareUrl,
         });
     }
 }

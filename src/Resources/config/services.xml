@@ -17,10 +17,10 @@
         <service id="Frosh\ShareBasket\Services\ShareBasketService">
             <argument id="Shopware\Core\Checkout\Cart\SalesChannel\CartService" type="service"/>
             <argument id="frosh_share_basket.repository" type="service"/>
-            <argument id="request_stack" type="service"/>
             <argument id="Shopware\Storefront\Framework\Routing\Router" type="service"/>
             <argument id="session" type="service"/>
             <argument id="translator.data_collector" type="service"/>
+            <argument id="sales_channel.product.repository" type="service"/>
         </service>
 
         <service id="Frosh\ShareBasket\ScheduledTask\ShareBasketCleanup">
@@ -41,7 +41,7 @@
             </call>
         </service>
 
-        <service id="Frosh\ShareBasket\Controller\ShareBasketController" public="true">
+        <service id="Frosh\ShareBasket\Administration\Controller\ShareBasketController" public="true">
             <argument id="Doctrine\DBAL\Connection" type="service"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>

@@ -36,21 +36,21 @@ Component.register('frosh-share-basket-list', {
     computed: {
         columns() {
             return [{
-                property: 'productNumber',
-                label: this.$t('frosh-share-basket.list.columnProductNumber'),
+                property: 'productName',
+                label: 'frosh-share-basket.list.columnProductName',
                 allowResize: true,
                 primary: true
             }, {
-                property: 'productName',
-                label: this.$t('frosh-share-basket.list.columnProductName'),
+                property: 'productNumber',
+                label: 'frosh-share-basket.list.columnProductNumber',
                 allowResize: true
             }, {
                 property: 'saveCount',
-                label: this.$t('frosh-share-basket.list.columnProductSaveCount'),
+                label: 'frosh-share-basket.list.columnProductSaveCount',
                 allowResize: true
             }, {
                 property: 'totalQuantity',
-                label: this.$t('frosh-share-basket.list.columnProductQuantity'),
+                label: 'frosh-share-basket.list.columnProductQuantity',
                 allowResize: true
             }];
         },

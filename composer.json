@@ -10,8 +10,10 @@
             "homepage": "https://friendsofshopware.de"
         }
     ],
-    "require": {
-        "shopware/core": "*"
+    "autoload": {
+        "psr-4": {
+            "Frosh\\ShareBasket\\": "src/"
+        }
     },
     "extra": {
         "shopware-plugin-class": "Frosh\\ShareBasket\\FroshPlatformShareBasket",
@@ -25,17 +27,9 @@
             "en-GB": "Shopware Plugin to share your basket."
         }
     },
-    "autoload": {
-        "psr-4": {
-            "Frosh\\ShareBasket\\": "src/"
-        }
-    },
-    "suggest": {
-        "shopware/storefront": "Require '*'.",
-        "shopware/administration": "Require '*'."
-    },
-    "conflict": {
-        "shopware/storefront": "<6,>=7",
-        "shopware/administration": "<6,>=7"
+    "require": {
+        "shopware/core": "~6.1",
+        "shopware/administration": "~6.1",
+        "shopware/storefront": "~6.1"
     }
 }

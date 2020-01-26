@@ -4,6 +4,7 @@ namespace Frosh\ShareBasket\Services;
 
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Symfony\Component\HttpFoundation\Request;
 
 interface ShareBasketServiceInterface
 {
@@ -15,7 +16,7 @@ interface ShareBasketServiceInterface
     /**
      * @return bool|Cart
      */
-    public function loadCart(SalesChannelContext $context);
+    public function loadCart(Request $request, SalesChannelContext $context);
 
     public function prepareLineItems(SalesChannelContext $context): array;
 }

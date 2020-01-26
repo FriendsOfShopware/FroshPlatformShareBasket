@@ -3,7 +3,6 @@
 namespace Frosh\ShareBasket\Storefront\Controller;
 
 use Frosh\ShareBasket\Services\ShareBasketService;
-use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
@@ -29,12 +28,14 @@ class ShareBasketController extends StorefrontController
     /**
      * @Route("/sharebasket/save", name="frontend.frosh.share-basket.save", options={"seo"="false"}, methods={"POST"}, defaults={"XmlHttpRequest"=true}))
      */
-    public function save(Request $request, SalesChannelContext $context): Response
+    public function save(SalesChannelContext $context): Response
     {
-        if ($froshShareBasketUrl = $this->shareBasketService->saveCart($context)) {
+        try {
+            $froshShareBasketUrl = $this->shareBasketService->saveCart($context);
             $froshShareBasketState = 'cartSaved';
-        } else {
+        } catch (\Exception $exception) {
             $froshShareBasketState = 'cartError';
+            $froshShareBasketUrl = null;
         }
 
         return $this->renderStorefront(
@@ -51,12 +52,13 @@ class ShareBasketController extends StorefrontController
      */
     public function load(Request $request, SalesChannelContext $context): Response
     {
-        if ($this->shareBasketService->loadCart($context) instanceof Cart) {
+        try {
+            $this->shareBasketService->loadCart($request, $context);
             $froshShareBasketState = 'cartLoaded';
             $this->addFlash('success', $this->trans('frosh-share-basket.cartLoaded'));
-        } else {
+        } catch (\Exception $exception) {
             $froshShareBasketState = 'cartNotFound';
-            $this->addFlash('info', $this->trans('frosh-share-basket.cartNotFound'));
+            $this->addFlash('danger', $this->trans('error.message-default'));
         }
 
         return $this->forwardToRoute(

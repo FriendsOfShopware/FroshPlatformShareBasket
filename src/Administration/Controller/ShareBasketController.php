@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Frosh\ShareBasket\Controller;
+namespace Frosh\ShareBasket\Administration\Controller;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
@@ -62,7 +62,7 @@ class ShareBasketController extends AbstractController
                 'froshShareBasketLineItem',
                 'product',
                 'product',
-                'froshShareBasketLineItem.identifier = product.id'
+                'froshShareBasketLineItem.identifier = product.product_number'
             )
             ->leftJoin(
                 'product',
