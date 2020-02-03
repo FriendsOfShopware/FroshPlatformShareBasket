@@ -58,7 +58,7 @@ class ShareBasketController extends StorefrontController
             $this->addFlash('success', $this->trans('frosh-share-basket.cartLoaded'));
         } catch (\Exception $exception) {
             $froshShareBasketState = 'cartNotFound';
-            $this->addFlash('danger', $this->trans('error.message-default'));
+            $this->addFlash('danger', $this->trans('frosh-share-basket.cartNotFound'));
         }
 
         return $this->forwardToRoute(
