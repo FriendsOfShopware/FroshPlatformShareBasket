@@ -104,10 +104,6 @@ class ShareBasketService implements ShareBasketServiceInterface
 
     /**
      * @throws InconsistentCriteriaIdsException
-     * @throws InvalidPayloadException
-     * @throws InvalidQuantityException
-     * @throws LineItemNotStackableException
-     * @throws MixedLineItemTypeException
      */
     public function loadCart(Request $request, SalesChannelContext $salesChannelContext): ?Cart
     {
@@ -182,24 +178,21 @@ class ShareBasketService implements ShareBasketServiceInterface
         ];
     }
 
-    /**
-     * @throws InvalidPayloadException
-     * @throws InvalidQuantityException
-     * @throws LineItemNotStackableException
-     * @throws MixedLineItemTypeException
-     */
     private function addLineItems(
         Cart $cart,
         SalesChannelContext $salesChannelContext,
         ShareBasketEntity $shareBasketEntity
     ): void {
         foreach ($shareBasketEntity->getLineItems() as $shareBasketLineItemEntity) {
-            if ($shareBasketLineItemEntity->getType() === LineItem::PRODUCT_LINE_ITEM_TYPE) {
-                $this->addProduct($cart, $salesChannelContext, $shareBasketLineItemEntity);
-            }
+            try {
+                if ($shareBasketLineItemEntity->getType() === LineItem::PRODUCT_LINE_ITEM_TYPE) {
+                    $this->addProduct($cart, $salesChannelContext, $shareBasketLineItemEntity);
+                }
 
-            if ($shareBasketLineItemEntity->getType() === PromotionProcessor::LINE_ITEM_TYPE) {
-                $this->addPromotion($cart, $salesChannelContext, $shareBasketLineItemEntity);
+                if ($shareBasketLineItemEntity->getType() === PromotionProcessor::LINE_ITEM_TYPE) {
+                    $this->addPromotion($cart, $salesChannelContext, $shareBasketLineItemEntity);
+                }
+            } catch (\Exception $e) {
             }
         }
     }
