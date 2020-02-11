@@ -170,6 +170,10 @@ class ShareBasketService implements ShareBasketServiceInterface
             ];
         }
 
+        usort($lineItems, static function ($a, $b) {
+           return strcmp($a['identifier'],$b['identifier']);
+        });
+
         return [
             'basketId' => $this->generateShareBasketId(),
             'hash' => sha1(serialize($lineItems)),
