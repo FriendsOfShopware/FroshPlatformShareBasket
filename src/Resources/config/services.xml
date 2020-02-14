@@ -4,13 +4,20 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+   <imports>
+       <import resource="services_command.xml"/>
+       <import resource="services_controller.xml"/>
+       <import resource="services_snippet.xml"/>
+       <import resource="services_subscriber.xml"/>
+       <import resource="services_task.xml"/>
+   </imports>
+
     <services>
 
         <service id="Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketDefinition">
             <tag name="shopware.entity.definition" entity="frosh_share_basket"/>
         </service>
-        <service
-            id="Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem\ShareBasketLineItemDefinition">
+        <service id="Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem\ShareBasketLineItemDefinition">
             <tag name="shopware.entity.definition" entity="frosh_share_basket_line_item"/>
         </service>
 
@@ -21,44 +28,7 @@
             <argument id="session" type="service"/>
             <argument id="translator.data_collector" type="service"/>
             <argument id="sales_channel.product.repository" type="service"/>
-        </service>
-
-        <service id="Frosh\ShareBasket\ScheduledTask\ShareBasketCleanup">
-            <tag name="shopware.scheduled.task"/>
-        </service>
-
-        <service id="Frosh\ShareBasket\ScheduledTask\ShareBasketCleanupHandler">
-            <argument type="service" id="scheduled_task.repository"/>
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
-            <argument id="frosh_share_basket.repository" type="service"/>
-            <tag name="messenger.message_handler"/>
-        </service>
-
-        <service id="Frosh\ShareBasket\Storefront\Controller\ShareBasketController" public="true">
-            <argument id="Frosh\ShareBasket\Services\ShareBasketService" type="service"/>
-            <call method="setContainer">
-                <argument id="service_container" type="service"/>
-            </call>
-        </service>
-
-        <service id="Frosh\ShareBasket\Administration\Controller\ShareBasketController" public="true">
-            <argument id="Doctrine\DBAL\Connection" type="service"/>
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-        </service>
-
-        <service id="Frosh\ShareBasket\Storefront\Page\Checkout\Cart\Subscriber\CheckoutPageSubscriber">
-            <argument id="Frosh\ShareBasket\Services\ShareBasketService" type="service"/>
-            <tag name="kernel.event_subscriber"/>
-        </service>
-
-        <service id="Frosh\ShareBasket\Snippet\Files\en_GB\SnippetFile_en_GB">
-            <tag name="shopware.snippet.file" priority="100"/>
-        </service>
-
-        <service id="Frosh\ShareBasket\Snippet\Files\de_DE\SnippetFile_de_DE">
-            <tag name="shopware.snippet.file" priority="100"/>
         </service>
 
     </services>
