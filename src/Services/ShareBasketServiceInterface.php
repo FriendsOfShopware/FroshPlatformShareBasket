@@ -3,6 +3,7 @@
 namespace Frosh\ShareBasket\Services;
 
 use Shopware\Core\Checkout\Cart\Cart;
+use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,4 +20,6 @@ interface ShareBasketServiceInterface
     public function loadCart(Request $request, SalesChannelContext $context);
 
     public function prepareLineItems(SalesChannelContext $context): array;
+
+    public function cleanup(): ?EntityWrittenContainerEvent;
 }

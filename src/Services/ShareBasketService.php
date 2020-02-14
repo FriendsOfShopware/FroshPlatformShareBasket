@@ -18,11 +18,14 @@ use Shopware\Core\Checkout\Promotion\Cart\PromotionItemBuilder;
 use Shopware\Core\Checkout\Promotion\Cart\PromotionProcessor;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepositoryInterface;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -39,7 +42,7 @@ class ShareBasketService implements ShareBasketServiceInterface
     /**
      * @var EntityRepositoryInterface
      */
-    private $repository;
+    private $shareBasketRepository;
 
     /**
      * @var RouterInterface
@@ -61,20 +64,27 @@ class ShareBasketService implements ShareBasketServiceInterface
      */
     private $productRepository;
 
+    /**
+     * @var SystemConfigService
+     */
+    private $systemConfigService;
+
     public function __construct(
         CartService $cartService,
-        EntityRepositoryInterface $repository,
+        EntityRepositoryInterface $shareBasketRepository,
         RouterInterface $router,
         Session $session,
         DataCollectorTranslator $dataCollectorTranslator,
-        SalesChannelRepositoryInterface $productRepository
+        SalesChannelRepositoryInterface $productRepository,
+        SystemConfigService $systemConfigService
     ) {
         $this->cartService = $cartService;
-        $this->repository = $repository;
+        $this->shareBasketRepository = $shareBasketRepository;
         $this->router = $router;
         $this->session = $session;
         $this->dataCollectorTranslator = $dataCollectorTranslator;
         $this->productRepository = $productRepository;
+        $this->systemConfigService = $systemConfigService;
     }
 
     public function saveCart(SalesChannelContext $salesChannelContext): ?string
@@ -84,7 +94,7 @@ class ShareBasketService implements ShareBasketServiceInterface
         $criteria->addFilter(new EqualsFilter('salesChannelId', $salesChannelContext->getSalesChannel()->getId()));
         $criteria->addFilter(new EqualsFilter('hash', $data['hash']));
 
-        $shareBasketEntity = $this->repository->search($criteria, $salesChannelContext->getContext())->first();
+        $shareBasketEntity = $this->shareBasketRepository->search($criteria, $salesChannelContext->getContext())->first();
         if ($shareBasketEntity instanceof ShareBasketEntity) {
             $data['id'] = $shareBasketEntity->getId();
             $data['basketId'] = $shareBasketEntity->getBasketId();
@@ -93,7 +103,7 @@ class ShareBasketService implements ShareBasketServiceInterface
             }
 
             unset($data['lineItems']);
-            $this->repository->update([$data], $salesChannelContext->getContext());
+            $this->shareBasketRepository->update([$data], $salesChannelContext->getContext());
             $this->session->set('froshShareBasketHash', $data['hash']);
 
             return $this->generateBasketUrl($data['basketId']);
@@ -119,7 +129,7 @@ class ShareBasketService implements ShareBasketServiceInterface
         $criteria->addAssociation('lineItems');
 
         /** @var ShareBasketEntity|null $shareBasketEntity */
-        $shareBasketEntity = $this->repository->search($criteria, $salesChannelContext->getContext())->first();
+        $shareBasketEntity = $this->shareBasketRepository->search($criteria, $salesChannelContext->getContext())->first();
 
         if (!$shareBasketEntity instanceof ShareBasketEntity) {
             throw new \RuntimeException(sprintf('Could not found a shared basket with id %s', $basketId));
@@ -170,8 +180,8 @@ class ShareBasketService implements ShareBasketServiceInterface
             ];
         }
 
-        usort($lineItems, static function ($a, $b) {
-           return strcmp($a['identifier'],$b['identifier']);
+        usort($lineItems, static function (array $a, array $b) {
+            return strcmp($a['identifier'], $b['identifier']);
         });
 
         return [
@@ -180,6 +190,37 @@ class ShareBasketService implements ShareBasketServiceInterface
             'salesChannelId' => $salesChannelContext->getSalesChannel()->getId(),
             'lineItems' => $lineItems,
         ];
+    }
+
+    /**
+     * @throws InconsistentCriteriaIdsException
+     */
+    public function cleanup(): ?EntityWrittenContainerEvent
+    {
+        $interval = -1 * abs($this->systemConfigService->get('ShareBasket.config.interval') ?: 6);
+        $dateTime = (new \DateTime())->add(\DateInterval::createFromDateString($interval . ' months'));
+
+        $criteria = new Criteria();
+        $criteria->addFilter(new RangeFilter(
+            'createdAt',
+            [
+                RangeFilter::LTE => $dateTime->format(DATE_ATOM),
+            ]
+        ));
+
+        $criteria->addAssociation('lineItems');
+
+        $shareBasketEntities = $this->shareBasketRepository->searchIds($criteria, Context::createDefaultContext());
+
+        if (empty($ids = $shareBasketEntities->getIds())) {
+            return null;
+        }
+
+        $ids = array_map(static function ($id) {
+            return ['id' => $id];
+        }, $ids);
+
+        return $this->shareBasketRepository->delete($ids, Context::createDefaultContext());
     }
 
     private function addLineItems(
@@ -208,7 +249,7 @@ class ShareBasketService implements ShareBasketServiceInterface
         }
 
         try {
-            $result = $this->repository->create([$data], $context);
+            $result = $this->shareBasketRepository->create([$data], $context);
         } catch (\Exception $e) {
             $data['basketId'] = $this->generateShareBasketId();
 

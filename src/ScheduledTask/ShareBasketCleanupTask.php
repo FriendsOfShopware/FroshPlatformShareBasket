@@ -4,7 +4,7 @@ namespace Frosh\ShareBasket\ScheduledTask;
 
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 
-class ShareBasketCleanup extends ScheduledTask
+class ShareBasketCleanupTask extends ScheduledTask
 {
     public static function getTaskName(): string
     {
