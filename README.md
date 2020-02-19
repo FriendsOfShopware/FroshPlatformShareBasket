@@ -11,6 +11,13 @@ This plugin allows your customers to save the current basket and share it via li
 * Configuration via the Shopware Admin.
 * Basic statistics about stored products.
 
+
+![Demonstration](https://raw.githubusercontent.com/FriendsOfShopware/FroshPlatformShareBasket/master/src/Resources/store/images/description_0.gif)
+
+![Statistics](https://raw.githubusercontent.com/FriendsOfShopware/FroshPlatformShareBasket/master/src/Resources/store/images/2.png)
+
+![Settings](https://raw.githubusercontent.com/FriendsOfShopware/FroshPlatformShareBasket/master/src/Resources/store/images/3.png)
+
 ## Requirements
 
 | Version 	| Requirements               	|
