@@ -26,7 +26,7 @@
             <argument id="frosh_share_basket.repository" type="service"/>
             <argument id="Shopware\Storefront\Framework\Routing\Router" type="service"/>
             <argument id="session" type="service"/>
-            <argument id="translator.data_collector" type="service"/>
+            <argument id="translator" type="service"/>
             <argument id="sales_channel.product.repository" type="service"/>
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
         </service>

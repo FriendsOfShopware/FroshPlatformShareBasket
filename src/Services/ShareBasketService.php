@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Translation\DataCollectorTranslator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ShareBasketService implements ShareBasketServiceInterface
 {
@@ -55,9 +55,9 @@ class ShareBasketService implements ShareBasketServiceInterface
     private $session;
 
     /**
-     * @var DataCollectorTranslator
+     * @var TranslatorInterface
      */
-    private $dataCollectorTranslator;
+    private $translator;
 
     /**
      * @var SalesChannelRepositoryInterface
@@ -74,7 +74,7 @@ class ShareBasketService implements ShareBasketServiceInterface
         EntityRepositoryInterface $shareBasketRepository,
         RouterInterface $router,
         Session $session,
-        DataCollectorTranslator $dataCollectorTranslator,
+        TranslatorInterface $translator,
         SalesChannelRepositoryInterface $productRepository,
         SystemConfigService $systemConfigService
     ) {
@@ -82,7 +82,7 @@ class ShareBasketService implements ShareBasketServiceInterface
         $this->shareBasketRepository = $shareBasketRepository;
         $this->router = $router;
         $this->session = $session;
-        $this->dataCollectorTranslator = $dataCollectorTranslator;
+        $this->translator = $translator;
         $this->productRepository = $productRepository;
         $this->systemConfigService = $systemConfigService;
     }
@@ -309,7 +309,7 @@ class ShareBasketService implements ShareBasketServiceInterface
                 $parameters['%' . $key . '%'] = $value;
             }
 
-            $message = $this->dataCollectorTranslator->trans('checkout.' . $error->getMessageKey(), $parameters);
+            $message = $this->translator->trans('checkout.' . $error->getMessageKey(), $parameters);
 
             $this->session->getFlashBag()->add($type, $message);
         }
