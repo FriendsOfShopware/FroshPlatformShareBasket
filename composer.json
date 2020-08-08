@@ -1,6 +1,6 @@
 {
     "name": "frosh/platform-share-basket",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "type": "shopware-platform-plugin",
     "description": "Shopware Plugin to share your basket",
     "license": "MIT",
@@ -25,11 +25,19 @@
         "description": {
             "de-DE": "Shopware Plugin, um Ihren Warenkorb zu teilen.",
             "en-GB": "Shopware Plugin to share your basket."
+        },
+        "manufacturerLink": {
+            "de-DE": "https://github.com/FriendsOfShopware/FroshPlatformShareBasket",
+            "en-GB": "https://github.com/FriendsOfShopware/FroshPlatformShareBasket"
+        },
+        "supportLink": {
+            "de-DE": "https://github.com/FriendsOfShopware/FroshPlatformShareBasket/issues",
+            "en-GB": "https://github.com/FriendsOfShopware/FroshPlatformShareBasket/issues"
         }
     },
     "require": {
-        "shopware/core": "~6.1",
-        "shopware/administration": "~6.1",
-        "shopware/storefront": "~6.1"
+        "shopware/core": "~6.3",
+        "shopware/administration": "~6.3",
+        "shopware/storefront": "~6.3"
     }
 }
