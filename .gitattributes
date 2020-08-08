@@ -1,0 +1,5 @@
+/.gitattributes export-ignore
+/.eslintignore export-ignore
+/.phpstan.neon.dist export-ignore
+/psalm.xml export-ignore
+/bin export-ignore
