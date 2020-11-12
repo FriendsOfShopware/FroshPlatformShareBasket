@@ -31,7 +31,8 @@ class ShareBasketController extends StorefrontController
     public function save(SalesChannelContext $context): Response
     {
         try {
-            $froshShareBasketUrl = $this->shareBasketService->saveCart($context);
+            $data = $this->shareBasketService->prepareLineItems($context);
+            $froshShareBasketUrl = $this->shareBasketService->saveCart($data, $context);
             $froshShareBasketState = 'cartSaved';
         } catch (\Exception $exception) {
             $froshShareBasketState = 'cartError';
