@@ -2,7 +2,7 @@
 
 namespace Frosh\ShareBasket\Storefront\Controller;
 
-use Frosh\ShareBasket\Services\ShareBasketService;
+use Frosh\ShareBasket\Services\ShareBasketServiceInterface;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
@@ -16,11 +16,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ShareBasketController extends StorefrontController
 {
     /**
-     * @var ShareBasketService
+     * @var ShareBasketServiceInterface
      */
     private $shareBasketService;
 
-    public function __construct(ShareBasketService $shareBasketService)
+    public function __construct(ShareBasketServiceInterface $shareBasketService)
     {
         $this->shareBasketService = $shareBasketService;
     }
