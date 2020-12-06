@@ -87,9 +87,8 @@ class ShareBasketService implements ShareBasketServiceInterface
         $this->systemConfigService = $systemConfigService;
     }
 
-    public function saveCart(SalesChannelContext $salesChannelContext): ?string
+    public function saveCart(array $data, SalesChannelContext $salesChannelContext): ?string
     {
-        $data = $this->prepareLineItems($salesChannelContext);
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('salesChannelId', $salesChannelContext->getSalesChannel()->getId()));
         $criteria->addFilter(new EqualsFilter('hash', $data['hash']));

@@ -3,7 +3,7 @@
 namespace Frosh\ShareBasket\Command;
 
 use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketDefinition;
-use Frosh\ShareBasket\Services\ShareBasketService;
+use Frosh\ShareBasket\Services\ShareBasketServiceInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,11 +13,11 @@ class ShareBasketCleanupCommand extends Command
     protected static $defaultName = 'frosh:share-basket-cleanup';
 
     /**
-     * @var ShareBasketService
+     * @var ShareBasketServiceInterface
      */
     private $shareBasketService;
 
-    public function __construct(ShareBasketService $shareBasketService)
+    public function __construct(ShareBasketServiceInterface $shareBasketService)
     {
         parent::__construct();
 

@@ -9,15 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface ShareBasketServiceInterface
 {
-    /**
-     * @return bool|string
-     */
-    public function saveCart(SalesChannelContext $context);
+    public function saveCart(array $data, SalesChannelContext $context): ?string;
 
-    /**
-     * @return bool|Cart
-     */
-    public function loadCart(Request $request, SalesChannelContext $context);
+    public function loadCart(Request $request, SalesChannelContext $context): ?Cart;
 
     public function prepareLineItems(SalesChannelContext $context): array;
 

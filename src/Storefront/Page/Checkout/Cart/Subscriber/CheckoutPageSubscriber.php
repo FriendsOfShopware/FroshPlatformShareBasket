@@ -2,7 +2,7 @@
 
 namespace Frosh\ShareBasket\Storefront\Page\Checkout\Cart\Subscriber;
 
-use Frosh\ShareBasket\Services\ShareBasketService;
+use Frosh\ShareBasket\Services\ShareBasketServiceInterface;
 use Shopware\Core\Checkout\Cart\Exception\PayloadKeyNotFoundException;
 use Shopware\Storefront\Page\Checkout\Cart\CheckoutCartPageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -10,11 +10,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class CheckoutPageSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var ShareBasketService
+     * @var ShareBasketServiceInterface
      */
     private $shareBasketService;
 
-    public function __construct(ShareBasketService $shareBasketService)
+    public function __construct(ShareBasketServiceInterface $shareBasketService)
     {
         $this->shareBasketService = $shareBasketService;
     }
@@ -47,7 +47,7 @@ class CheckoutPageSubscriber implements EventSubscriberInterface
                 if ($hash === $shareBasketData['hash']) {
                     $page->assign([
                         'froshShareBasketState' => 'cartExists',
-                        'froshShareBasketUrl' => $this->shareBasketService->saveCart($event->getSalesChannelContext()),
+                        'froshShareBasketUrl' => $this->shareBasketService->saveCart($shareBasketData, $event->getSalesChannelContext()),
                     ]);
                 }
             } catch (PayloadKeyNotFoundException $e) {

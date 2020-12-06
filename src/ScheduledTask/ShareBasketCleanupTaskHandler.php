@@ -2,20 +2,20 @@
 
 namespace Frosh\ShareBasket\ScheduledTask;
 
-use Frosh\ShareBasket\Services\ShareBasketService;
+use Frosh\ShareBasket\Services\ShareBasketServiceInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 
 class ShareBasketCleanupTaskHandler extends ScheduledTaskHandler
 {
     /**
-     * @var ShareBasketService
+     * @var ShareBasketServiceInterface
      */
     private $shareBasketService;
 
     public function __construct(
         EntityRepositoryInterface $scheduledTaskRepository,
-        ShareBasketService $shareBasketService
+        ShareBasketServiceInterface $shareBasketService
     ) {
         parent::__construct($scheduledTaskRepository);
         $this->shareBasketService = $shareBasketService;
