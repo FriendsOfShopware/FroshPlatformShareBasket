@@ -1,3 +1,7 @@
+# 0.1.3
+
+- Erweiterbarkeit durch andere Plugins verbessert
+
 # 0.1.2
 
 - Shopware 6.3 Kompatibilität
