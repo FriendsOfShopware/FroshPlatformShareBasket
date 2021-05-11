@@ -30,7 +30,7 @@ class ShareBasketController extends AbstractController
     }
 
     /**
-     * @Route("/api/v{version}/frosh/sharebasket/statistics", name="api.action.frosh.share-basket.statistics", methods={"POST"})
+     * @Route("/api/frosh/sharebasket/statistics", name="api.action.frosh.share-basket.statistics", methods={"POST"})
      */
     public function statistics(Request $request, Context $context): Response
     {
@@ -97,7 +97,10 @@ class ShareBasketController extends AbstractController
                 $filters[] = $condition['field'] . ' = ' . $parameter;
             }
         }
-        $query->andWhere($query->expr()->orX(...$filters));
+
+        if (count($filters) >= 1) {
+            $query->andWhere($query->expr()->orX(...$filters));
+        }
 
         $statement = $query->execute();
         if ($statement instanceof Statement) {

@@ -1,10 +1,14 @@
+# 0.2.0
+
+- Shopware 6.4 compatibility
+
 # 0.1.3
 
 - Extensibility through other plugins improved
 
 # 0.1.2
 
-- Shopware 6.3 compability
+- Shopware 6.3 compatibility
 
 # 0.1.0
 

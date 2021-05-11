@@ -7,7 +7,6 @@
    <imports>
        <import resource="services_command.xml"/>
        <import resource="services_controller.xml"/>
-       <import resource="services_snippet.xml"/>
        <import resource="services_subscriber.xml"/>
        <import resource="services_task.xml"/>
    </imports>
