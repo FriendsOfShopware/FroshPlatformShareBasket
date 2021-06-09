@@ -23,8 +23,8 @@
             "en-GB": "Share basket"
         },
         "description": {
-            "de-DE": "Shopware Plugin, um Ihren Warenkorb zu teilen.",
-            "en-GB": "Shopware Plugin to share your basket."
+            "de-DE": "Dieses Plugin erlaubt es Ihren Kunden den aktuellen Warenkorb zu speichern und per Link, E-Mail, Facebook oder WhatsApp zu teilen. Einsehbare gespeicherte Warenkörbe in Administration.",
+            "en-GB": "This plugin allows your customers to save the current shopping cart and share it via link, email, Facebook or WhatsApp. Saved baskets can be viewed in administration."
         },
         "manufacturerLink": {
             "de-DE": "https://github.com/FriendsOfShopware/FroshPlatformShareBasket",
