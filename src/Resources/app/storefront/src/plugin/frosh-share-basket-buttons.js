@@ -11,13 +11,9 @@ export default class FroshShareBasketButtons extends Plugin {
     };
 
     init() {
-        try {
-            this._UrlShareBtn = DomAccess.querySelector(this.el, this.options.urlShareSelector);
-            this._UrlShareInput = DomAccess.querySelector(this.el, this.options.urlInputSelector);
-            this._webShareBtn = DomAccess.querySelector(this.el, this.options.webShareSelector);
-        } catch (e) {
-            /* empty */
-        }
+        this._UrlShareBtn = DomAccess.querySelector(this.el, this.options.urlShareSelector, false);
+        this._UrlShareInput = DomAccess.querySelector(this.el, this.options.urlInputSelector, false);
+        this._webShareBtn = DomAccess.querySelector(this.el, this.options.webShareSelector, false);
 
         this._registerEvents();
     }
