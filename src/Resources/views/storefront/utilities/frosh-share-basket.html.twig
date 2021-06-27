@@ -24,27 +24,27 @@
             {% if config('FroshPlatformShareBasket.config.email') %}
                 <a class="btn btn-primary btn-share-basket-email"
                    target="_blank"
-                   href="mailto:%20?subject={{ "frosh-share-basket.shareTitle"|trans }}%20{{ config('shopName') }}&body={{ froshShareBasketUrl }}">
+                   href="mailto:%20?subject={{ "frosh-share-basket.shareTitle"|trans }}%20{{ config('core.basicInformation.shopName') }}&body={{ froshShareBasketUrl }}">
                     <i class="fas fa-envelope"></i> {{ "frosh-share-basket.email"|trans }}
                 </a>
             {% endif %}
             {% if config('FroshPlatformShareBasket.config.facebook') %}
                 <a class="btn btn-primary btn-share-basket-facebook"
                    target="_blank"
-                   href="https://www.facebook.com/sharer/sharer.php?quote={{ "frosh-share-basket.shareTitle"|trans }} {{ config('shopName') }}&u={{ froshShareBasketUrl }}">
+                   href="https://www.facebook.com/sharer/sharer.php?quote={{ "frosh-share-basket.shareTitle"|trans }} {{ config('core.basicInformation.shopName') }}&u={{ froshShareBasketUrl }}">
                     <i class="fab fa-facebook-f"></i> {{ "frosh-share-basket.facebook"|trans }}
                 </a>
             {% endif %}
             {% if config('FroshPlatformShareBasket.config.whatsapp') %}
                 <a class="btn btn-primary btn-share-basket-whatsapp"
                    target="_blank"
-                   href="https://api.whatsapp.com/send?text={{ "frosh-share-basket.shareTitle"|trans }} {{ config('shopName') }} {{ froshShareBasketUrl }}">
+                   href="https://api.whatsapp.com/send?text={{ "frosh-share-basket.shareTitle"|trans }} {{ config('core.basicInformation.shopName') }} {{ froshShareBasketUrl }}">
                     <i class="fab fa-whatsapp"></i> {{ "frosh-share-basket.whatsapp"|trans }}
                 </a>
             {% endif %}
             {% if config('FroshPlatformShareBasket.config.webshare') %}
                 <button class="btn btn-primary btn-share-basket-webshare"
-                        data-share-title="{{ "frosh-share-basket.shareTitle"|trans }} {{ config('shopName') }}"
+                        data-share-title="{{ "frosh-share-basket.shareTitle"|trans }} {{ config('core.basicInformation.shopName') }}"
                         data-share-text=""
                         data-share-url="{{ froshShareBasketUrl }}">
                     <i class="fas fa-share-alt"></i> {{ "frosh-share-basket.webshare"|trans }}
