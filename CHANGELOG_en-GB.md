@@ -1,3 +1,7 @@
+# 0.2.2
+
+- Improved Shopware 6.4 compatibility
+
 # 0.2.1
 
 - Shopware 6.4 compatibility
