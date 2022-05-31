@@ -13,8 +13,8 @@ Module.register('frosh-share-basket', {
     routes: {
         list: {
             component: 'frosh-share-basket-list',
-            path: 'list'
-        }
+            path: 'list',
+        },
     },
 
     navigation: [{
@@ -22,6 +22,6 @@ Module.register('frosh-share-basket', {
         color: '#079FDF',
         path: 'frosh.share.basket.list',
         icon: 'default-shopping-paper-bag-product',
-        parent: 'sw-marketing'
-    }]
+        parent: 'sw-marketing',
+    }],
 });

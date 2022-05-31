@@ -10,7 +10,7 @@ Component.register('frosh-share-basket-list', {
     inject: ['repositoryFactory', 'syncService', 'localeToLanguageService'],
 
     mixins: [
-        Mixin.getByName('listing')
+        Mixin.getByName('listing'),
     ],
 
     data() {
@@ -23,13 +23,13 @@ Component.register('frosh-share-basket-list', {
             sortDirection: 'DESC',
             filterSidebarIsOpen: false,
             salesChannelFilters: [],
-            internalFilters: {}
+            internalFilters: {},
         };
     },
 
     metaInfo() {
         return {
-            title: this.$createTitle()
+            title: this.$createTitle(),
         };
     },
 
@@ -39,25 +39,25 @@ Component.register('frosh-share-basket-list', {
                 property: 'productName',
                 label: 'frosh-share-basket.list.columnProductName',
                 allowResize: true,
-                primary: true
+                primary: true,
             }, {
                 property: 'productNumber',
                 label: 'frosh-share-basket.list.columnProductNumber',
-                allowResize: true
+                allowResize: true,
             }, {
                 property: 'saveCount',
                 label: 'frosh-share-basket.list.columnProductSaveCount',
-                allowResize: true
+                allowResize: true,
             }, {
                 property: 'totalQuantity',
                 label: 'frosh-share-basket.list.columnProductQuantity',
-                allowResize: true
+                allowResize: true,
             }];
         },
 
         salesChannelStore() {
             return this.repositoryFactory.create('sales_channel');
-        }
+        },
     },
 
     created() {
@@ -134,8 +134,8 @@ Component.register('frosh-share-basket-list', {
                 '/frosh/sharebasket/statistics',
                 criteria,
                 {
-                    headers: this.syncService.getBasicHeaders()
-                }
+                    headers: this.syncService.getBasicHeaders(),
+                },
             ).then((result) => {
                 this.items = result.data.data;
                 this.total = result.data.total;
@@ -143,6 +143,6 @@ Component.register('frosh-share-basket-list', {
             }).catch(() => {
                 this.isLoading = false;
             });
-        }
-    }
+        },
+    },
 });

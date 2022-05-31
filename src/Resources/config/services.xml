@@ -28,8 +28,14 @@
             <argument id="translator" type="service"/>
             <argument id="sales_channel.product.repository" type="service"/>
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
+            <argument id="Frosh\ShareBasket\Services\CustomizedProductsService" type="service"/>
         </service>
+
         <service id="Frosh\ShareBasket\Services\ShareBasketServiceInterface" alias="Frosh\ShareBasket\Services\ShareBasketService" />
+
+        <service id="Frosh\ShareBasket\Services\CustomizedProductsService">
+            <argument type="service" id="Swag\CustomizedProducts\Core\Checkout\Cart\Route\AddCustomizedProductsToCartRoute" on-invalid="null"/>
+        </service>
 
     </services>
 </container>
