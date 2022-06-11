@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <psalm
-    autoloader="../../../vendor/autoload.php"
+    autoloader="bin/static-analyze-autoloader.php"
     findUnusedVariablesAndParams="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
@@ -9,13 +9,25 @@
     <projectFiles>
         <directory name="src"/>
         <ignoreFiles>
-            <directory name="../../../platform"/> <!-- would otherwise inspect Shopware -->
-            <directory name="../../../vendor/shopware/platform"/> <!-- would otherwise inspect Shopware -->
+            <directory name="../../../src"/> <!-- would otherwise inspect src -->
+            <directory name="../../../vendor"/> <!-- would otherwise inspect vendor -->
+            <directory name="../../../platform"/> <!-- would otherwise inspect platform -->
+            <directory name="vendor"/> <!-- would otherwise inspect vendor -->
         </ignoreFiles>
     </projectFiles>
 
-    <issueHandlers>
+    <plugins>
+        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
+    </plugins>
 
+    <forbiddenFunctions>
+        <function name="dump"/>
+        <function name="dd"/>
+        <function name="var_dump"/>
+        <function name="error_log"/>
+    </forbiddenFunctions>
+
+    <issueHandlers>
         <!-- level 3 issues - slightly lazy code writing, but provably low false-negatives -->
         <PropertyNotSetInConstructor errorLevel="info"/>
         <MissingConstructor errorLevel="info"/>

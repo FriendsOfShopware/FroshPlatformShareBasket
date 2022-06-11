@@ -35,7 +35,7 @@ class ShareBasketCleanupCommand extends Command
         $result = $event->getEventByEntityName(ShareBasketDefinition::ENTITY_NAME);
 
         if ($result !== null) {
-            $deleted = count($result->getIds());
+            $deleted = \count($result->getIds());
             $output->writeln($deleted . ' deleted');
         }
 

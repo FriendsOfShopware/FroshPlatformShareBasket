@@ -1,8 +1,15 @@
+includes:
+    - %ShopwareRoot%/vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - phpstan-baseline.neon
+
 parameters:
     level: 8
     inferPrivatePropertyTypeFromConstructor: true
     checkMissingIterableValueType: false
+    reportUnmatchedIgnoredErrors: false
     symfony:
         constant_hassers: false
         # the placeholder "%ShopwareHashedCacheDir%" will be replaced on execution by bin/phpstan-config-generator.php script
-        container_xml_path: '%rootDir%/../../../../../../..%ShopwareHashedCacheDir%/srcShopware_Development_KernelDevDebugContainer.xml'
+        container_xml_path: '../../..%ShopwareHashedCacheDir%/%ShopwareKernelClass%DevDebugContainer.xml'
+    bootstrapFiles:
+        -   bin/static-analyze-autoloader.php

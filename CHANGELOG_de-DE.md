@@ -1,3 +1,7 @@
+# 0.3.0
+
+- Kompatibilität mit Custom Products (3.4) hinzugefügt
+
 # 0.2.2
 
 - Improved Shopware 6.4 Kompatibilität

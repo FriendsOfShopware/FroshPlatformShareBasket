@@ -98,7 +98,7 @@ class ShareBasketController extends AbstractController
             }
         }
 
-        if (count($filters) >= 1) {
+        if (\count($filters) >= 1) {
             $query->andWhere($query->expr()->orX(...$filters));
         }
 

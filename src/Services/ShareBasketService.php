@@ -26,6 +26,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepositoryInterface;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use Swag\CustomizedProducts\Core\Checkout\CustomizedProductsCartDataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -69,6 +70,11 @@ class ShareBasketService implements ShareBasketServiceInterface
      */
     private $systemConfigService;
 
+    /**
+     * @var CustomizedProductsService
+     */
+    private $customizedProductsService;
+
     public function __construct(
         CartService $cartService,
         EntityRepositoryInterface $shareBasketRepository,
@@ -76,7 +82,8 @@ class ShareBasketService implements ShareBasketServiceInterface
         Session $session,
         TranslatorInterface $translator,
         SalesChannelRepositoryInterface $productRepository,
-        SystemConfigService $systemConfigService
+        SystemConfigService $systemConfigService,
+        CustomizedProductsService $customizedProductsService
     ) {
         $this->cartService = $cartService;
         $this->shareBasketRepository = $shareBasketRepository;
@@ -85,6 +92,7 @@ class ShareBasketService implements ShareBasketServiceInterface
         $this->translator = $translator;
         $this->productRepository = $productRepository;
         $this->systemConfigService = $systemConfigService;
+        $this->customizedProductsService = $customizedProductsService;
     }
 
     public function saveCart(array $data, SalesChannelContext $salesChannelContext): ?string
@@ -142,7 +150,7 @@ class ShareBasketService implements ShareBasketServiceInterface
         $this->cartService->createNew($token, $name);
         $cart = $this->cartService->getCart($salesChannelContext->getToken(), $salesChannelContext);
 
-        $this->addLineItems($cart, $salesChannelContext, $shareBasketEntity);
+        $this->addLineItems($cart, $salesChannelContext, $shareBasketEntity, $request);
 
         return $this->traceErrors($this->cartService->recalculate($cart, $salesChannelContext));
     }
@@ -155,8 +163,10 @@ class ShareBasketService implements ShareBasketServiceInterface
         $cart = $this->cartService->getCart($salesChannelContext->getToken(), $salesChannelContext);
 
         $lineItems = [];
+
         foreach ($cart->getLineItems() as $lineItem) {
             $identifier = false;
+            $shareBasketLineItem = [];
 
             if ($lineItem->getType() === LineItem::PRODUCT_LINE_ITEM_TYPE) {
                 $identifier = $lineItem->getPayloadValue('productNumber');
@@ -166,17 +176,28 @@ class ShareBasketService implements ShareBasketServiceInterface
                 $identifier = $lineItem->getPayloadValue('code');
             }
 
+            if ($customizedProduct = $this->customizedProductsService->prepareCustomizedProductsLineItem($lineItem)) {
+                /** @var LineItem $product */
+                $product = $customizedProduct['product'];
+                $identifier = $product->getReferencedId();
+                $shareBasketLineItem['customFields'] = [
+                    'customizedProductsConfiguration' => $customizedProduct['customizedProductsConfiguration'],
+                ];
+            }
+
             if (!$identifier) {
                 continue;
             }
 
-            $lineItems[] = [
+            $shareBasketLineItem += [
                 'identifier' => $identifier,
                 'quantity' => $lineItem->getQuantity(),
                 'type' => $lineItem->getType(),
                 'removable' => $lineItem->isRemovable(),
                 'stackable' => $lineItem->isStackable(),
             ];
+
+            $lineItems[] = $shareBasketLineItem;
         }
 
         usort($lineItems, static function (array $a, array $b) {
@@ -196,14 +217,14 @@ class ShareBasketService implements ShareBasketServiceInterface
      */
     public function cleanup(): ?EntityWrittenContainerEvent
     {
-        $interval = -1 * abs($this->systemConfigService->get('ShareBasket.config.interval') ?: 6);
+        $interval = -1 * abs((int) $this->systemConfigService->get('ShareBasket.config.interval') ?: 6);
         $dateTime = (new \DateTime())->add(\DateInterval::createFromDateString($interval . ' months'));
 
         $criteria = new Criteria();
         $criteria->addFilter(new RangeFilter(
             'createdAt',
             [
-                RangeFilter::LTE => $dateTime->format(DATE_ATOM),
+                RangeFilter::LTE => $dateTime->format(\DATE_ATOM),
             ]
         ));
 
@@ -225,7 +246,8 @@ class ShareBasketService implements ShareBasketServiceInterface
     private function addLineItems(
         Cart $cart,
         SalesChannelContext $salesChannelContext,
-        ShareBasketEntity $shareBasketEntity
+        ShareBasketEntity $shareBasketEntity,
+        Request $request
     ): void {
         foreach ($shareBasketEntity->getLineItems() as $shareBasketLineItemEntity) {
             try {
@@ -235,6 +257,13 @@ class ShareBasketService implements ShareBasketServiceInterface
 
                 if ($shareBasketLineItemEntity->getType() === PromotionProcessor::LINE_ITEM_TYPE) {
                     $this->addPromotion($cart, $salesChannelContext, $shareBasketLineItemEntity);
+                }
+
+                if (
+                    class_exists(CustomizedProductsCartDataCollector::class)
+                    && $shareBasketLineItemEntity->getType() === CustomizedProductsCartDataCollector::CUSTOMIZED_PRODUCTS_TEMPLATE_LINE_ITEM_TYPE
+                ) {
+                    $this->customizedProductsService->addCustomProduct($cart, $salesChannelContext, $shareBasketLineItemEntity, $request);
                 }
             } catch (\Exception $e) {
             }
@@ -360,8 +389,7 @@ class ShareBasketService implements ShareBasketServiceInterface
     ): void {
         $itemBuilder = new PromotionItemBuilder();
         $lineItem = $itemBuilder->buildPlaceholderItem(
-            $shareBasketLineItemEntity->getIdentifier(),
-            $salesChannelContext->getContext()->getCurrencyPrecision()
+            $shareBasketLineItemEntity->getIdentifier()
         );
         $this->cartService->add($cart, $lineItem, $salesChannelContext);
     }
