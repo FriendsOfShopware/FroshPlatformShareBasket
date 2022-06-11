@@ -1,7 +1,5 @@
 # FroshPlatformShareBasket
 
-[![Join the chat at https://gitter.im/FriendsOfShopware/Lobby](https://badges.gitter.im/FriendsOfShopware/Lobby.svg)](https://gitter.im/FriendsOfShopware/Lobby)
-
 This plugin allows your customers to save the current basket and share it via link.
 
 ## Features
@@ -22,7 +20,7 @@ This plugin allows your customers to save the current basket and share it via li
 
 | Version 	| Requirements               	|
 |---------	|----------------------------	|
-| 0.1.1    	| Min. Shopware 6.1 	        |
+| 0.3.0    	| Min. Shopware 6.4 	        |
 
 
 ## Zip-Installation
