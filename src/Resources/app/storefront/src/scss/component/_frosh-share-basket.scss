@@ -1,25 +1,75 @@
-.frosh-share-basket--buttons {
-    .btn-share-basket-whatsapp {
-        background-color: #32B322;
-        color: #FFF;
+.frosh-share-basket-button-wrapper {
+    .btn {
+        display: flex;
+        flex-flow: row nowrap;
+        width: fit-content;
+        align-items: center;
 
-        &:hover {
-            background-color: darken(#32B322, 10%);
+        .frosh-share-basket-icon-wrapper {
+            padding-left: 15px;
         }
     }
+}
 
-    .btn-share-basket-facebook {
-        background-color: #4B6FBD;
-        color: #FFF;
+.frosh-share-basket-button-wrapper {
+    .frosh-share-basket--buttons {
+        .btn-share-basket-whatsapp {
+            background-color: #32B322;
+            color: #FFF;
 
-        &:hover {
-            background-color: darken(#4B6FBD, 10%);
+            &:hover {
+                background-color: darken(#32B322, 10%);
+            }
+        }
+
+        .btn-share-basket-facebook {
+            background-color: #4B6FBD;
+            color: #FFF;
+
+            &:hover {
+                background-color: darken(#4B6FBD, 10%);
+            }
+        }
+
+        .btn-share-basket-webshare {
+            display: none;
+            background-color: #000;
+            color: #FFF;
+        }
+
+        .btn-share-basket-url {
+            .frosh-share-basket-button-label {
+                margin-right: 15px;
+            }
         }
     }
+}
 
-    .btn-share-basket-webshare {
-        display: none;
-        background-color: #000;
-        color: #FFF;
+.checkout-aside-action {
+    .frosh-share-basket--buttons, .frosh-share-basket-button-wrapper {
+        display: flex;
+        flex-flow: column nowrap;
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+}
+
+.checkout-main {
+    .frosh-share-basket--buttons {
+        display: flex;
+        flex-flow: row wrap;
+
+        .btn {
+            &:not(:last-child) {
+                margin-right: 15px;
+            }
+
+            &.btn-share-basket-webshare {
+                height: 40px;
+            }
+        }
     }
 }
