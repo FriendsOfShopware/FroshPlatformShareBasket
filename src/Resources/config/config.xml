@@ -14,6 +14,20 @@
             <description lang="de-DE">Warenkörbe älter als X Monate werden per Cronjob gelöscht. Cronjob Shopware_CronJob_ShareBasketCleanup muss aktiv sein.</description>
         </input-field>
 
+        <input-field type="checkbox">
+            <name>showAboveCart</name>
+            <label>Show share buttons above cart</label>
+            <label lang="de-DE">Zeigt die Share-Buttons über dem Warenkorb an</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="checkbox">
+            <name>showInCartSidebar</name>
+            <label>Show share buttons in cart sidebar</label>
+            <label lang="de-DE">Zeigt die Share-Buttons in der Warenkorb-Sidebar an</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
         <input-field type="bool">
             <name>email</name>
             <defaultValue>true</defaultValue>
