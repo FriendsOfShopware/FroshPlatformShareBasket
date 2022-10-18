@@ -12,43 +12,95 @@
         <div class="frosh-share-basket--buttons" data-frosh-share-basket-buttons="true">
 
             <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <button class="btn btn-secondary btn-share-basket-url" type="button">
-                        <i class="fas fa-external-link-alt"></i>
-                        {{ 'frosh-share-basket.copyUrl'|trans }}
+                {% block layout_utilities_frosh_share_basket_button_share_basket_url %}
+                    <button class="btn btn-primary btn-share-basket-url" type="button">
+                        <span class="frosh-share-basket-button-label">
+                            {% block layout_utilities_frosh_share_basket_button_share_basket_url_label %}
+                                {{ 'frosh-share-basket.copyUrl'|trans }}
+                            {% endblock %}
+                        </span>
+                        <input type="text" id="share-basket-url" class="form-control" value="{{ froshShareBasketUrl }}">
+                        <div class="frosh-share-basket-icon-wrapper">
+                            {% block layout_utilities_frosh_share_basket_button_share_basket_url_icon %}
+                                {% sw_icon 'link' %}
+                            {% endblock %}
+                        </div>
                     </button>
-                </div>
-                <input type="text" id="share-basket-url" class="form-control" value="{{ froshShareBasketUrl }}">
+                {% endblock %}
             </div>
 
             {% if config('FroshPlatformShareBasket.config.email') %}
-                <a class="btn btn-primary btn-share-basket-email"
-                   target="_blank"
-                   href="mailto:%20?subject={{ "frosh-share-basket.shareTitle"|trans }}%20{{ config('core.basicInformation.shopName') }}&body={{ froshShareBasketUrl }}">
-                    <i class="fas fa-envelope"></i> {{ "frosh-share-basket.email"|trans }}
-                </a>
+                {% block layout_utilities_frosh_share_basket_button_share_basket_email %}
+                    <a class="btn btn-primary btn-share-basket-email mb-2"
+                       target="_blank"
+                       href="mailto:%20?subject={{ "frosh-share-basket.shareTitle"|trans }}%20{{ config('core.basicInformation.shopName') }}&body={{ froshShareBasketUrl }}">
+                        <span class="frosh-share-basket-button-label">
+                            {% block layout_utilities_frosh_share_basket_button_share_basket_email_label %}
+                                {{ "frosh-share-basket.email"|trans }}
+                            {% endblock %}
+                        </span>
+                        <div class="frosh-share-basket-icon-wrapper">
+                            {% block layout_utilities_frosh_share_basket_button_share_basket_email_icon %}
+                                {% sw_icon 'envelope' %}
+                            {% endblock %}
+                        </div>
+                    </a>
+                {% endblock %}
             {% endif %}
             {% if config('FroshPlatformShareBasket.config.facebook') %}
-                <a class="btn btn-primary btn-share-basket-facebook"
-                   target="_blank"
-                   href="https://www.facebook.com/sharer/sharer.php?quote={{ "frosh-share-basket.shareTitle"|trans }} {{ config('core.basicInformation.shopName') }}&u={{ froshShareBasketUrl }}">
-                    <i class="fab fa-facebook-f"></i> {{ "frosh-share-basket.facebook"|trans }}
-                </a>
+                {% block layout_utilities_frosh_share_basket_button_share_basket_facebook %}
+                    <a class="btn btn-primary btn-share-basket-facebook mb-2"
+                       target="_blank"
+                       href="https://www.facebook.com/sharer/sharer.php?quote={{ "frosh-share-basket.shareTitle"|trans }} {{ config('core.basicInformation.shopName') }}&u={{ froshShareBasketUrl }}">
+                        <span class="frosh-share-basket-button-label">
+                            {% block layout_utilities_frosh_share_basket_button_share_basket_facebook_label %}
+                                {{ "frosh-share-basket.facebook"|trans }}
+                            {% endblock %}
+                        </span>
+                        <div class="frosh-share-basket-icon-wrapper">
+                            {% block layout_utilities_frosh_share_basket_button_share_basket_facebook_icon %}
+                                {% sw_icon 'avatar' %}
+                            {% endblock %}
+                        </div>
+                    </a>
+                {% endblock %}
             {% endif %}
             {% if config('FroshPlatformShareBasket.config.whatsapp') %}
-                <a class="btn btn-primary btn-share-basket-whatsapp"
-                   target="_blank"
-                   href="https://api.whatsapp.com/send?text={{ "frosh-share-basket.shareTitle"|trans }} {{ config('core.basicInformation.shopName') }} {{ froshShareBasketUrl }}">
-                    <i class="fab fa-whatsapp"></i> {{ "frosh-share-basket.whatsapp"|trans }}
-                </a>
+                {% block layout_utilities_frosh_share_basket_button_share_basket_whatsapp %}
+                    <a class="btn btn-primary btn-share-basket-whatsapp mb-2"
+                       target="_blank"
+                       href="https://api.whatsapp.com/send?text={{ "frosh-share-basket.shareTitle"|trans }} {{ config('core.basicInformation.shopName') }} {{ froshShareBasketUrl }}">
+                        <span class="frosh-share-basket-button-label">
+                            {% block layout_utilities_frosh_share_basket_button_share_basket_whatsapp_label %}
+                                {{ "frosh-share-basket.whatsapp"|trans }}
+                            {% endblock %}
+                        </span>
+                        <div class="frosh-share-basket-icon-wrapper">
+                            {% block layout_utilities_frosh_share_basket_button_share_basket_whatsapp_icon %}
+                                {% sw_icon 'speech-bubbles' %}
+                            {% endblock %}
+                        </div>
+                    </a>
+                {% endblock %}
             {% endif %}
             {% if config('FroshPlatformShareBasket.config.webshare') %}
-                <button class="btn btn-primary btn-share-basket-webshare"
-                        data-share-title="{{ "frosh-share-basket.shareTitle"|trans }} {{ config('core.basicInformation.shopName') }}"
-                        data-share-text=""
-                        data-share-url="{{ froshShareBasketUrl }}">
-                    <i class="fas fa-share-alt"></i> {{ "frosh-share-basket.webshare"|trans }}
-                </button>
+                {% block layout_utilities_frosh_share_basket_button_share_basket_webshare%}
+                    <button class="btn btn-primary btn-share-basket-webshare"
+                            data-share-title="{{ "frosh-share-basket.shareTitle"|trans }} {{ config('core.basicInformation.shopName') }}"
+                            data-share-text=""
+                            data-share-url="{{ froshShareBasketUrl }}">
+                        <span class="frosh-share-basket-button-label">
+                            {% block layout_utilities_frosh_share_basket_button_share_basket_webshare_label %}
+                                {{ "frosh-share-basket.webshare"|trans }}
+                            {% endblock %}
+                        </span>
+                        <div class="frosh-share-basket-icon-wrapper">
+                            {% block layout_utilities_frosh_share_basket_button_share_basket_webshare_icon %}
+                                {% sw_icon 'share' %}
+                            {% endblock %}
+                        </div>
+                    </button>
+                {% endblock %}
             {% endif %}
         </div>
     </div>

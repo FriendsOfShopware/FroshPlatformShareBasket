@@ -1,0 +1,51 @@
+{% block frosh_share_basket_basic_button_container %}
+            <div class="frosh-share-basket-button-wrapper {% block frosh_share_basket_basic_button_wrapper_additional_classes %}p-0 col-12 mt-4{% endblock %}">
+
+                {% if page.froshShareBasketState == 'cartExists' %}
+
+                    {% block frosh_share_basket_basic_button_share_buttons %}
+                        {% sw_include '@Storefront/storefront/utilities/frosh-share-basket.html.twig' with {
+                            froshShareBasketUrl: page.froshShareBasketUrl,
+                            froshShareBasketState: page.froshShareBasketState,
+                        } %}
+                    {% endblock %}
+
+                {% elseif page.froshShareBasketState != 'cartLoaded' %}
+
+                    <div class="js-frosh-share-basket-container" data-frosh-share-basket-buttons="true">
+                        {% block frosh_share_basket_basic_button_save_cart_form %}
+                            <form action="{{ path('frontend.frosh.share-basket.save') }}"
+                                  method="post"
+                                  class="js-frosh-share-basket-form"
+                                  data-form-ajax-submit="true"
+                                  data-form-ajax-submit-options='{
+                                            "replaceSelectors": ".js-frosh-share-basket-container",
+                                            "submitOnce": true
+                                          }'>
+
+                                {% block page_checkout_cart_product_table_share_basket_csrf %}
+                                    {{ sw_csrf('frontend.frosh.share-basket.save') }}
+                                {% endblock %}
+
+                                {% block frosh_share_basket_basic_button_save_cart %}
+                                    <button class="btn btn-primary btn-share-basket-save"
+                                            type="submit">
+                                        <span class="frosh-share-basket-button-label">
+                                            {% block frosh_share_basket_basic_button_save_cart_label %}
+                                                {{ "frosh-share-basket.saveCart"|trans }}
+                                            {% endblock %}
+                                        </span>
+                                        <div class="frosh-share-basket-icon-wrapper">
+                                            {% block frosh_share_basket_basic_button_save_cart_icon %}
+                                                {% sw_icon 'save' %}
+                                            {% endblock %}
+                                        </div>
+                                    </button>
+                                {% endblock %}
+                            </form>
+                        {% endblock %}
+                    </div>
+
+                {% endif %}
+            </div>
+{% endblock %}

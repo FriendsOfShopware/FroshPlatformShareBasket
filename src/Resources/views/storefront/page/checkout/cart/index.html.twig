@@ -1,44 +1,24 @@
 {% sw_extends '@Storefront/storefront/page/checkout/cart/index.html.twig' %}
 
 {% block page_checkout_cart_product_table %}
-    <div class="container mb-3">
-        <div class="row">
-            <div class="p-0 col-sm-12 col-md-8 col-lg-6">
-
-                {% if page.froshShareBasketState == 'cartExists' %}
-
-                    {% sw_include '@Storefront/storefront/utilities/frosh-share-basket.html.twig' with {
-                        froshShareBasketUrl: page.froshShareBasketUrl,
-                        froshShareBasketState: page.froshShareBasketState,
-                    } %}
-
-                {% elseif page.froshShareBasketState != 'cartLoaded' %}
-
-                    <div class="js-frosh-share-basket-container" data-frosh-share-basket-buttons="true">
-                        <form action="{{ path('frontend.frosh.share-basket.save') }}"
-                              method="post"
-                              class="js-frosh-share-basket-form"
-                              data-form-ajax-submit="true"
-                              data-form-ajax-submit-options='{
-                                "replaceSelectors": ".js-frosh-share-basket-container",
-                                "submitOnce": true
-                              }'>
-
-                            {% block page_checkout_cart_product_table_share_basket_csrf %}
-                                {{ sw_csrf('frontend.frosh.share-basket.save') }}
-                            {% endblock %}
-
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> {{ "frosh-share-basket.saveCart"|trans }}
-                            </button>
-                        </form>
-                    </div>
-
-                {% endif %}
+    {% if config('FroshPlatformShareBasket.config.showAboveCart') %}
+        <div class="container frosh-share-basket {% block frosh_share_basket_basic_button_container_additional_classes %}mb-4{% endblock %}">
+            <div class="row">
+                {% sw_include "@Storefront/storefront/utilities/frosh-share-basket-basic-button.html.twig" %}
             </div>
         </div>
-    </div>
+    {% endif %}
 
     {{ parent() }}
 
+{% endblock %}
+
+{% block page_checkout_aside_actions %}
+    {% if config('FroshPlatformShareBasket.config.showInCartSidebar') %}
+        <div class="checkout-aside-action frosh-share-basket">
+            {% sw_include "@Storefront/storefront/utilities/frosh-share-basket-basic-button.html.twig" %}
+        </div>
+    {% endif %}
+
+    {{ parent() }}
 {% endblock %}
