@@ -25,7 +25,7 @@ export default class FroshShareBasketButtons extends Plugin {
 
         if (this._webShareBtn && navigator.share !== undefined) {
             this._webShareBtn.addEventListener('click', this._onClickWebShare.bind(this));
-            this._webShareBtn.style.display = 'inline-block';
+            this._webShareBtn.style.display = 'flex';
         }
     }
 
