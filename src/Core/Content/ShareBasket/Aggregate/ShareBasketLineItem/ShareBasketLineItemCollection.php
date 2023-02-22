@@ -5,13 +5,7 @@ namespace Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineIt
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 
 /**
- * @method void                           add(ShareBasketLineItemEntity $entity)
- * @method void                           set(string $key, ShareBasketLineItemEntity $entity)
- * @method ShareBasketLineItemEntity[]    getIterator()
- * @method ShareBasketLineItemEntity[]    getElements()
- * @method ShareBasketLineItemEntity|null get(string $key)
- * @method ShareBasketLineItemEntity|null first()
- * @method ShareBasketLineItemEntity|null last()
+ * @extends EntityCollection<ShareBasketLineItemEntity>
  */
 class ShareBasketLineItemCollection extends EntityCollection
 {

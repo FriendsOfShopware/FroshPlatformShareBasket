@@ -24,13 +24,11 @@
                                 "submitOnce": true
                               }'>
 
-                            {% block page_checkout_cart_product_table_share_basket_csrf %}
-                                {{ sw_csrf('frontend.frosh.share-basket.save') }}
+                            {% block frosh_share_basket_save_button %}
+                                <button type="submit" class="btn btn-primary">
+                                    {{ "frosh-share-basket.saveCart"|trans }}
+                                </button>
                             {% endblock %}
-
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> {{ "frosh-share-basket.saveCart"|trans }}
-                            </button>
                         </form>
                     </div>
 

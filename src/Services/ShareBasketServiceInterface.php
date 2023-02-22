@@ -9,11 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface ShareBasketServiceInterface
 {
-    public function saveCart(array $data, SalesChannelContext $context): ?string;
+    public function saveCart(Request $request, array $data, SalesChannelContext $salesChannelContext): ?string;
 
-    public function loadCart(Request $request, SalesChannelContext $context): ?Cart;
+    public function loadCart(Request $request, SalesChannelContext $salesChannelContext): ?Cart;
 
-    public function prepareLineItems(SalesChannelContext $context): array;
+    public function prepareLineItems(SalesChannelContext $salesChannelContext): array;
 
     public function cleanup(): ?EntityWrittenContainerEvent;
 }

@@ -19,9 +19,11 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class ShareBasketLineItemDefinition extends EntityDefinition
 {
+    final public const ENTITY_NAME = 'frosh_share_basket_line_item';
+
     public function getEntityName(): string
     {
-        return 'frosh_share_basket_line_item';
+        return self::ENTITY_NAME;
     }
 
     public function getCollectionClass(): string

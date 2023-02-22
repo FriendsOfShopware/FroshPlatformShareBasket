@@ -3,10 +3,8 @@
 namespace Frosh\ShareBasket\Administration\Controller;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\Statement;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,32 +12,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @RouteScope(scopes={"api"})
- */
+#[Route(defaults: ['_routeScope' => ['api']])]
 class ShareBasketController extends AbstractController
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
-
-    public function __construct(Connection $connection)
+    public function __construct(private readonly Connection $connection)
     {
-        $this->connection = $connection;
     }
 
-    /**
-     * @Route("/api/frosh/sharebasket/statistics", name="api.action.frosh.share-basket.statistics", methods={"POST"})
-     */
+    #[Route(path: '/api/frosh/sharebasket/statistics', name: 'api.action.frosh.share-basket.statistics', methods: ['POST'])]
     public function statistics(Request $request, Context $context): Response
     {
         $languageId = $request->get('languageId', $context->getLanguageId());
         $page = $request->get('page');
         $limit = $request->get('limit');
         $offset = ($page - 1) * $limit;
-        $data = [];
-        $totalCount = 0;
         $filters = [];
 
         $query = $this->connection->createQueryBuilder();
@@ -92,21 +78,20 @@ class ShareBasketController extends AbstractController
         }
 
         foreach ($request->get('filters') as $condition) {
-            foreach (explode('|', $condition['value']) as $value) {
+            foreach (explode('|', (string) $condition['value']) as $value) {
                 $parameter = $query->createNamedParameter(Uuid::fromHexToBytes($value));
                 $filters[] = $condition['field'] . ' = ' . $parameter;
             }
         }
 
         if (\count($filters) >= 1) {
-            $query->andWhere($query->expr()->orX(...$filters));
+            $query->andWhere($query->expr()->or(...$filters));
         }
 
-        $statement = $query->execute();
-        if ($statement instanceof Statement) {
-            $data = $statement->fetchAll();
-            $totalCount = (int) $this->connection->fetchColumn('SELECT FOUND_ROWS()');
-        }
+        $result = $query->executeQuery();
+
+        $data = $result->fetchAllAssociative();
+        $totalCount = (int) $this->connection->fetchOne('SELECT FOUND_ROWS()');
 
         return new JsonResponse([
             'total' => $totalCount,

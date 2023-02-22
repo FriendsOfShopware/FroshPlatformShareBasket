@@ -3,62 +3,31 @@
 namespace Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem;
 
 use Shopware\Core\Checkout\Cart\Cart;
+use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class ShareBasketLineItemEntity extends Entity
 {
     use EntityIdTrait;
+    use EntityCustomFieldsTrait;
 
-    /**
-     * @var string
-     */
-    protected $identifier;
+    protected string $identifier;
 
-    /**
-     * @var int
-     */
-    protected $quantity;
+    protected int $quantity;
 
-    /**
-     * @var string
-     */
-    protected $type;
+    protected string $type;
 
-    /**
-     * @var array|null
-     */
-    protected $customFields;
+    protected string $cartId;
 
-    /**
-     * @var string
-     */
-    protected $cartId;
+    protected Cart $cart;
 
-    /**
-     * @var Cart
-     */
-    protected $cart;
+    protected bool $removable = false;
 
-    /**
-     * @var bool
-     */
-    protected $removable = false;
+    protected bool $stackable = false;
 
-    /**
-     * @var bool
-     */
-    protected $stackable = false;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    protected $updatedAt;
+    protected ProductEntity $product;
 
     public function getIdentifier(): string
     {
@@ -88,16 +57,6 @@ class ShareBasketLineItemEntity extends Entity
     public function setType(string $type): void
     {
         $this->type = $type;
-    }
-
-    public function getCustomFields(): ?array
-    {
-        return $this->customFields;
-    }
-
-    public function setCustomFields(?array $customFields): void
-    {
-        $this->customFields = $customFields;
     }
 
     public function getCartId(): string
@@ -138,5 +97,15 @@ class ShareBasketLineItemEntity extends Entity
     public function setStackable(bool $stackable): void
     {
         $this->stackable = $stackable;
+    }
+
+    public function getProduct(): ProductEntity
+    {
+        return $this->product;
+    }
+
+    public function setProduct(ProductEntity $product): void
+    {
+        $this->product = $product;
     }
 }

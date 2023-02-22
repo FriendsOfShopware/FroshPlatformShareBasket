@@ -3,17 +3,11 @@
 namespace Frosh\ShareBasket;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\ConnectionException;
-use Doctrine\DBAL\DBALException;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 
 class FroshPlatformShareBasket extends Plugin
 {
-    /**
-     * @throws DBALException
-     * @throws ConnectionException
-     */
     public function uninstall(UninstallContext $context): void
     {
         parent::uninstall($context);

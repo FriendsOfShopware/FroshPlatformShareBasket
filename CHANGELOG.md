@@ -1,3 +1,7 @@
+# 1.0.0
+
+- Compatibility with Shopware 6.5
+
 # 0.3.0
 
 - Added compatibility with Custom Products (3.4)

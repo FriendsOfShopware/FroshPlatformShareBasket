@@ -18,7 +18,7 @@ use Shopware\Core\System\SalesChannel\SalesChannelDefinition;
 
 class ShareBasketDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME = 'frosh_share_basket';
+    final public const ENTITY_NAME = 'frosh_share_basket';
 
     public function getEntityName(): string
     {

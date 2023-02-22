@@ -18,9 +18,10 @@ This plugin allows your customers to save the current basket and share it via li
 
 ## Requirements
 
-| Version 	| Requirements               	|
-|---------	|----------------------------	|
-| 0.3.0    	| Min. Shopware 6.4 	        |
+| Version 	  | Requirements               	 |
+|------------|------------------------------|
+| 0.3.0    	 | Min. Shopware 6.4 	          |
+| 1.0.0    	 | Min. Shopware 6.5 	          |
 
 
 ## Zip-Installation
