@@ -3,20 +3,13 @@
 namespace Frosh\ShareBasket\Storefront\Page\Checkout\Cart\Subscriber;
 
 use Frosh\ShareBasket\Services\ShareBasketServiceInterface;
-use Shopware\Core\Checkout\Cart\Exception\PayloadKeyNotFoundException;
 use Shopware\Storefront\Page\Checkout\Cart\CheckoutCartPageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CheckoutPageSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var ShareBasketServiceInterface
-     */
-    private $shareBasketService;
-
-    public function __construct(ShareBasketServiceInterface $shareBasketService)
+    public function __construct(private readonly ShareBasketServiceInterface $shareBasketService)
     {
-        $this->shareBasketService = $shareBasketService;
     }
 
     public static function getSubscribedEvents(): array
@@ -42,15 +35,16 @@ class CheckoutPageSubscriber implements EventSubscriberInterface
 
         $session = $event->getRequest()->getSession();
         if ($hash = $session->get('froshShareBasketHash')) {
-            try {
-                $shareBasketData = $this->shareBasketService->prepareLineItems($event->getSalesChannelContext());
-                if ($hash === $shareBasketData['hash']) {
-                    $page->assign([
-                        'froshShareBasketState' => 'cartExists',
-                        'froshShareBasketUrl' => $this->shareBasketService->saveCart($shareBasketData, $event->getSalesChannelContext()),
-                    ]);
-                }
-            } catch (PayloadKeyNotFoundException $e) {
+            $shareBasketData = $this->shareBasketService->prepareLineItems($event->getSalesChannelContext());
+            if ($hash === $shareBasketData['hash']) {
+                $page->assign([
+                    'froshShareBasketState' => 'cartExists',
+                    'froshShareBasketUrl' => $this->shareBasketService->saveCart(
+                        $event->getRequest(),
+                        $shareBasketData,
+                        $event->getSalesChannelContext()
+                    ),
+                ]);
             }
         }
     }

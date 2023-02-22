@@ -13,7 +13,6 @@
         </service>
 
         <service id="Frosh\ShareBasket\ScheduledTask\ShareBasketCleanupTaskHandler">
-            <argument key="$scheduledTaskRepository" type="service" id="scheduled_task.repository"/>
             <tag name="messenger.message_handler"/>
         </service>
 

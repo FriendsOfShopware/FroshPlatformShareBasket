@@ -11,45 +11,17 @@ class ShareBasketEntity extends Entity
 {
     use EntityIdTrait;
 
-    /**
-     * @var string
-     */
-    protected $basketId;
+    protected string $basketId;
 
-    /**
-     * @var string
-     */
-    protected $hash;
+    protected string $hash;
 
-    /**
-     * @var int
-     */
-    protected $saveCount;
+    protected int $saveCount;
 
-    /**
-     * @var string
-     */
-    protected $salesChannelId;
+    protected string $salesChannelId;
 
-    /**
-     * @var SalesChannelEntity
-     */
-    protected $salesChannel;
+    protected SalesChannelEntity $salesChannel;
 
-    /**
-     * @var ShareBasketLineItemCollection
-     */
-    protected $lineItems;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    protected $updatedAt;
+    protected ShareBasketLineItemCollection $lineItems;
 
     public function getBasketId(): string
     {

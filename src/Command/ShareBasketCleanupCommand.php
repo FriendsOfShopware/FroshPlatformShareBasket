@@ -4,31 +4,25 @@ namespace Frosh\ShareBasket\Command;
 
 use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketDefinition;
 use Frosh\ShareBasket\Services\ShareBasketServiceInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand('frosh:share-basket-cleanup')]
 class ShareBasketCleanupCommand extends Command
 {
-    protected static $defaultName = 'frosh:share-basket-cleanup';
-
-    /**
-     * @var ShareBasketServiceInterface
-     */
-    private $shareBasketService;
-
-    public function __construct(ShareBasketServiceInterface $shareBasketService)
+    public function __construct(private readonly ShareBasketServiceInterface $shareBasketService)
     {
         parent::__construct();
-
-        $this->shareBasketService = $shareBasketService;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $event = $this->shareBasketService->cleanup();
 
-        if ($event === null) {
+        if (!$event instanceof EntityWrittenContainerEvent) {
             return 0;
         }
 
