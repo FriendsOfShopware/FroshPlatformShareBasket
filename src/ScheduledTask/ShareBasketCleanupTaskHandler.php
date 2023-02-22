@@ -3,17 +3,21 @@
 namespace Frosh\ShareBasket\ScheduledTask;
 
 use Frosh\ShareBasket\Services\ShareBasketServiceInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler(handles: ShareBasketCleanupTask::class)]
-class ShareBasketCleanupTaskHandler
+class ShareBasketCleanupTaskHandler extends ScheduledTaskHandler
 {
     public function __construct(
+        EntityRepository $scheduledTaskRepository,
         private readonly ShareBasketServiceInterface $shareBasketService
     ) {
+        parent::__construct($scheduledTaskRepository);
     }
 
-    public function __invoke(ShareBasketCleanupTask $basketCleanupTask): void
+    public function run(): void
     {
         $this->shareBasketService->cleanup();
     }

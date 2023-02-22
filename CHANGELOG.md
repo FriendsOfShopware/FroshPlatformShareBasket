@@ -1,3 +1,7 @@
+# 1.0.1
+
+- Fixed scheduled task
+
 # 1.0.0
 
 - Compatibility with Shopware 6.5
