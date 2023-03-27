@@ -2,7 +2,7 @@
 
 namespace Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem;
 
-use Shopware\Core\Checkout\Cart\Cart;
+use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketEntity;
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
@@ -19,9 +19,9 @@ class ShareBasketLineItemEntity extends Entity
 
     protected string $type;
 
-    protected string $cartId;
+    protected string $shareBasketId;
 
-    protected Cart $cart;
+    protected ShareBasketEntity $shareBasket;
 
     protected bool $removable = false;
 
@@ -59,24 +59,24 @@ class ShareBasketLineItemEntity extends Entity
         $this->type = $type;
     }
 
-    public function getCartId(): string
+    public function getShareBasketId(): string
     {
-        return $this->cartId;
+        return $this->shareBasketId;
     }
 
-    public function setCartId(string $cartId): void
+    public function setShareBasketId(string $shareBasketId): void
     {
-        $this->cartId = $cartId;
+        $this->shareBasketId = $shareBasketId;
     }
 
-    public function getCart(): Cart
+    public function getShareBasket(): ShareBasketEntity
     {
-        return $this->cart;
+        return $this->shareBasket;
     }
 
-    public function setCart(Cart $cart): void
+    public function setShareBasket(ShareBasketEntity $shareBasket): void
     {
-        $this->cart = $cart;
+        $this->shareBasket = $shareBasket;
     }
 
     public function isRemovable(): bool

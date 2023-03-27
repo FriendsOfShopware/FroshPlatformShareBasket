@@ -51,7 +51,7 @@ class ShareBasketDefinition extends EntityDefinition
             new StringField('hash', 'hash'),
             (new FkField('sales_channel_id', 'salesChannelId', SalesChannelDefinition::class))->addFlags(new Required()),
             new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id'),
-            (new OneToManyAssociationField('lineItems', ShareBasketLineItemDefinition::class, 'cart_id'))->addFlags(new CascadeDelete()),
+            (new OneToManyAssociationField('lineItems', ShareBasketLineItemDefinition::class, 'share_basket_id'))->addFlags(new CascadeDelete()),
         ]);
     }
 }

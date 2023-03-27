@@ -40,14 +40,14 @@ class ShareBasketLineItemDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
-            (new FkField('cart_id', 'cartId', ShareBasketDefinition::class))->addFlags(new Required()),
+            (new FkField('share_basket_id', 'shareBasketId', ShareBasketDefinition::class))->addFlags(new Required()),
             (new StringField('identifier', 'identifier'))->addFlags(new Required()),
             new IntField('quantity', 'quantity'),
             (new StringField('type', 'type'))->addFlags(new Required()),
             new CustomFields(),
             new BoolField('stackable', 'stackable'),
             new BoolField('removable', 'removable'),
-            new ManyToOneAssociationField('cart', 'cart_id', ShareBasketDefinition::class, 'id'),
+            new ManyToOneAssociationField('shareBasket', 'share_basket_id', ShareBasketDefinition::class, 'id'),
             new OneToOneAssociationField('product', 'identifier', 'product_number', ProductDefinition::class),
         ]);
     }
