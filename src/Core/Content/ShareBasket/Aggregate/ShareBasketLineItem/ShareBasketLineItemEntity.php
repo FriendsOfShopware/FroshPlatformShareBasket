@@ -29,6 +29,8 @@ class ShareBasketLineItemEntity extends Entity
 
     protected ProductEntity $product;
 
+    protected ?array $payload = null;
+
     public function getIdentifier(): string
     {
         return $this->identifier;
@@ -107,5 +109,15 @@ class ShareBasketLineItemEntity extends Entity
     public function setProduct(ProductEntity $product): void
     {
         $this->product = $product;
+    }
+
+    public function getPayload(): ?array
+    {
+        return $this->payload;
+    }
+
+    public function setPayload(?array $payload): void
+    {
+        $this->payload = $payload;
     }
 }

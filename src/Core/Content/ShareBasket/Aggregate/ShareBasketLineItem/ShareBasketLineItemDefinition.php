@@ -12,6 +12,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
@@ -44,6 +45,7 @@ class ShareBasketLineItemDefinition extends EntityDefinition
             (new StringField('identifier', 'identifier'))->addFlags(new Required()),
             new IntField('quantity', 'quantity'),
             (new StringField('type', 'type'))->addFlags(new Required()),
+            new JsonField('payload', 'payload'),
             new CustomFields(),
             new BoolField('stackable', 'stackable'),
             new BoolField('removable', 'removable'),

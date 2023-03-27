@@ -3,6 +3,7 @@
 namespace Frosh\ShareBasket\Services;
 
 use Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem\ShareBasketLineItemEntity;
+use Frosh\ShareBasket\Core\Content\ShareBasket\Events\ShareBasketPrepareLineItemEvent;
 use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketDefinition;
 use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketEntity;
 use Shopware\Core\Checkout\Cart\Cart;
@@ -24,6 +25,7 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ShareBasketService implements ShareBasketServiceInterface
 {
@@ -32,7 +34,8 @@ class ShareBasketService implements ShareBasketServiceInterface
         private readonly EntityRepository $shareBasketRepository,
         private readonly RouterInterface $router,
         private readonly SalesChannelRepository $productRepository,
-        private readonly SystemConfigService $systemConfigService
+        private readonly SystemConfigService $systemConfigService,
+        private readonly EventDispatcherInterface $eventDispatcher
     ) {
     }
 
@@ -103,7 +106,6 @@ class ShareBasketService implements ShareBasketServiceInterface
 
         foreach ($cart->getLineItems() as $lineItem) {
             $identifier = false;
-            $shareBasketLineItem = [];
 
             if ($lineItem->getType() === LineItem::PRODUCT_LINE_ITEM_TYPE) {
                 $identifier = $lineItem->getPayloadValue('productNumber');
@@ -117,15 +119,21 @@ class ShareBasketService implements ShareBasketServiceInterface
                 continue;
             }
 
-            $shareBasketLineItem += [
+            $shareBasketLineItem = [
                 'identifier' => $identifier,
                 'quantity' => $lineItem->getQuantity(),
                 'type' => $lineItem->getType(),
                 'removable' => $lineItem->isRemovable(),
                 'stackable' => $lineItem->isStackable(),
+                'payload' => null,
             ];
 
-            $lineItems[] = $shareBasketLineItem;
+            $event = $this->eventDispatcher->dispatch(
+                new ShareBasketPrepareLineItemEvent($shareBasketLineItem, $lineItem, $salesChannelContext),
+                ShareBasketPrepareLineItemEvent::class,
+            );
+
+            $lineItems[] = $event->getShareBasketLineItem();
         }
 
         usort($lineItems, static fn (array $a, array $b): int => strcmp((string) $a['identifier'], (string) $b['identifier']));
