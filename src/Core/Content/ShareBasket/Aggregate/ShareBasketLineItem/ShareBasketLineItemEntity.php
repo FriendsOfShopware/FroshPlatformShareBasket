@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem;
 
@@ -10,8 +11,8 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class ShareBasketLineItemEntity extends Entity
 {
-    use EntityIdTrait;
     use EntityCustomFieldsTrait;
+    use EntityIdTrait;
 
     protected string $identifier;
 

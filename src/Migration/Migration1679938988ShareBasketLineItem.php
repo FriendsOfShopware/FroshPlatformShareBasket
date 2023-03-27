@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace Frosh\ShareBasket\Migration;
 
@@ -15,9 +16,9 @@ class Migration1679938988ShareBasketLineItem extends MigrationStep
     public function update(Connection $connection): void
     {
         $sql = <<<SQL
-            ALTER TABLE `frosh_share_basket_line_item` CHANGE `cart_id` `share_basket_id` BINARY(16) NOT NULL;
-            ALTER TABLE `frosh_share_basket_line_item` ADD COLUMN `payload` JSON NULL;
-        SQL;
+                ALTER TABLE `frosh_share_basket_line_item` CHANGE `cart_id` `share_basket_id` BINARY(16) NOT NULL;
+                ALTER TABLE `frosh_share_basket_line_item` ADD COLUMN `payload` JSON NULL;
+            SQL;
         $connection->executeStatement($sql);
     }
 
