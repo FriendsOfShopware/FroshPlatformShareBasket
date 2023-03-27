@@ -1,3 +1,7 @@
+# 1.1.1
+
+- Added capability to load payload values
+ 
 # 1.1.0
 
 - Added capability to store payload 

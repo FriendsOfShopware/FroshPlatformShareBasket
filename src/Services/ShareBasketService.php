@@ -259,6 +259,7 @@ class ShareBasketService implements ShareBasketServiceInterface
             $productId,
             $shareBasketLineItemEntity->getQuantity()
         );
+        $this->setPayloadValues($shareBasketLineItemEntity->getPayload() ?? [], $lineItem);
         $lineItem->setStackable($shareBasketLineItemEntity->isStackable());
         $lineItem->setRemovable($shareBasketLineItemEntity->isRemovable());
         $lineItem->setPayload(['id' => $productId]);
@@ -284,5 +285,16 @@ class ShareBasketService implements ShareBasketServiceInterface
         $criteria->addFilter(new EqualsFilter('productNumber', $number));
 
         return $this->productRepository->searchIds($criteria, $salesChannelContext)->firstId();
+    }
+
+    private function setPayloadValues(array $payload, LineItem $lineItem): void
+    {
+        foreach ($payload as $key => $value) {
+            try {
+                $lineItem->setPayloadValue($key, $value);
+            } catch (\Exception) {
+                // do nothing
+            }
+        }
     }
 }
