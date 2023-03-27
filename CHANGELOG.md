@@ -1,3 +1,7 @@
+# 1.1.0
+
+- Added capability to store payload 
+
 # 1.0.1
 
 - Fixed scheduled task
