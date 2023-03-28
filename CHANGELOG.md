@@ -1,4 +1,8 @@
-# 1.1.1
+# 1.1.2
+
+- Persist/restore line item id 
+ 
+- # 1.1.1
 
 - Added capability to load payload values
  

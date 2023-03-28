@@ -50,6 +50,7 @@ class ShareBasketLineItemDefinition extends EntityDefinition
             new CustomFields(),
             new BoolField('stackable', 'stackable'),
             new BoolField('removable', 'removable'),
+            (new StringField('line_item_identifier', 'lineItemIdentifier'))->addFlags(new Required()),
             new ManyToOneAssociationField('shareBasket', 'share_basket_id', ShareBasketDefinition::class, 'id'),
             new OneToOneAssociationField('product', 'identifier', 'product_number', ProductDefinition::class),
         ]);

@@ -122,6 +122,7 @@ class ShareBasketService implements ShareBasketServiceInterface
 
             $shareBasketLineItem = [
                 'identifier' => $identifier,
+                'lineItemIdentifier' => $lineItem->getId(),
                 'quantity' => $lineItem->getQuantity(),
                 'type' => $lineItem->getType(),
                 'removable' => $lineItem->isRemovable(),
@@ -254,7 +255,7 @@ class ShareBasketService implements ShareBasketServiceInterface
         }
 
         $lineItem = new LineItem(
-            $productId,
+            $shareBasketLineItemEntity->getLineItemIdentifier(),
             $shareBasketLineItemEntity->getType(),
             $productId,
             $shareBasketLineItemEntity->getQuantity()
