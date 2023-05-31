@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Frosh\ShareBasket\Services;
 
 use Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem\ShareBasketLineItemEntity;
+use Frosh\ShareBasket\Core\Content\ShareBasket\Events\ShareBasketAddLineItemEvent;
 use Frosh\ShareBasket\Core\Content\ShareBasket\Events\ShareBasketPrepareLineItemEvent;
 use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketDefinition;
 use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketEntity;
@@ -116,10 +117,6 @@ class ShareBasketService implements ShareBasketServiceInterface
                 $identifier = $lineItem->getPayloadValue('code');
             }
 
-            if (!$identifier) {
-                continue;
-            }
-
             $shareBasketLineItem = [
                 'identifier' => $identifier,
                 'lineItemIdentifier' => $lineItem->getId(),
@@ -135,7 +132,13 @@ class ShareBasketService implements ShareBasketServiceInterface
                 ShareBasketPrepareLineItemEvent::class,
             );
 
-            $lineItems[] = $event->getShareBasketLineItem();
+            $shareBasketLineItem = $event->getShareBasketLineItem();
+
+            if (!$shareBasketLineItem['identifier']) {
+                continue;
+            }
+
+            $lineItems[] = $shareBasketLineItem;
         }
 
         usort($lineItems, static fn (array $a, array $b): int => strcmp((string) $a['identifier'], (string) $b['identifier']));
@@ -182,6 +185,11 @@ class ShareBasketService implements ShareBasketServiceInterface
     ): void {
         foreach ($shareBasketEntity->getLineItems() as $shareBasketLineItemEntity) {
             try {
+                $this->eventDispatcher->dispatch(
+                    new ShareBasketAddLineItemEvent($cart, $salesChannelContext, $shareBasketLineItemEntity),
+                    ShareBasketAddLineItemEvent::class,
+                );
+
                 if ($shareBasketLineItemEntity->getType() === LineItem::PRODUCT_LINE_ITEM_TYPE) {
                     $this->addProduct($cart, $salesChannelContext, $shareBasketLineItemEntity);
                 }

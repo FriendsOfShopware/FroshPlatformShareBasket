@@ -1,4 +1,8 @@
-# 1.1.2
+# 1.1.3
+
+- Fix line item prepare & add event
+
+- # 1.1.2
 
 - Persist/restore line item id 
  
