@@ -5,6 +5,7 @@
     <card>
         <title>Share basket</title>
         <title lang="de-DE">Warenkorb teilen</title>
+
         <input-field type="int">
             <name>interval</name>
             <defaultValue>6</defaultValue>
@@ -17,7 +18,7 @@
         <input-field type="bool">
             <name>email</name>
             <defaultValue>true</defaultValue>
-            <label>E-Mail Share</label>
+            <label>Email Share</label>
             <label lang="de-DE">E-Mail Share</label>
         </input-field>
 
@@ -25,21 +26,18 @@
             <name>facebook</name>
             <defaultValue>true</defaultValue>
             <label>Facebook Share</label>
-            <label lang="de-DE">Facebook Share</label>
         </input-field>
 
         <input-field type="bool">
             <name>whatsapp</name>
             <defaultValue>true</defaultValue>
             <label>WhatsApp Share</label>
-            <label lang="de-DE">WhatsApp Share</label>
         </input-field>
 
         <input-field type="bool">
             <name>webshare</name>
             <defaultValue>true</defaultValue>
             <label>Web Share</label>
-            <label lang="de-DE">Web Share</label>
             <description>Enables the native sharing feature on supported devices.</description>
             <description lang="de-DE">Aktiviert die native Teilen-Funktion auf unterstützten Endgeräten.</description>
         </input-field>
