@@ -5,6 +5,7 @@ namespace Frosh\ShareBasket\Services;
 
 use Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem\ShareBasketLineItemEntity;
 use Frosh\ShareBasket\Core\Content\ShareBasket\Events\ShareBasketAddLineItemEvent;
+use Frosh\ShareBasket\Core\Content\ShareBasket\Events\ShareBasketCleanupCriteriaEvent;
 use Frosh\ShareBasket\Core\Content\ShareBasket\Events\ShareBasketPrepareLineItemEvent;
 use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketDefinition;
 use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketEntity;
@@ -166,6 +167,11 @@ class ShareBasketService implements ShareBasketServiceInterface
         ));
 
         $criteria->addAssociation('lineItems');
+
+        $this->eventDispatcher->dispatch(
+            new ShareBasketCleanupCriteriaEvent($criteria),
+            ShareBasketCleanupCriteriaEvent::class
+        );
 
         $shareBasketEntities = $this->shareBasketRepository->searchIds($criteria, Context::createDefaultContext());
 
