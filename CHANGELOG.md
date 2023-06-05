@@ -1,4 +1,8 @@
-# 1.1.3
+# 1.1.4
+
+- Added ShareBasketCleanupCriteriaEvent
+
+- # 1.1.3
 
 - Fix line item prepare & add event
 
