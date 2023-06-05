@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Frosh\ShareBasket\Core\Content\ShareBasket\Events;
 
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
