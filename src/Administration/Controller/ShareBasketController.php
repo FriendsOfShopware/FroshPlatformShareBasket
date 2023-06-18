@@ -43,7 +43,7 @@ class ShareBasketController extends AbstractController
                 'shareBasket',
                 'frosh_share_basket_line_item',
                 'froshShareBasketLineItem',
-                'shareBasket.id = froshShareBasketLineItem.cart_id'
+                'shareBasket.id = froshShareBasketLineItem.share_basket_id'
             )
             ->leftJoin(
                 'froshShareBasketLineItem',

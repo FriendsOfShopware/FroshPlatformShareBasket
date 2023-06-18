@@ -1,3 +1,7 @@
+# 1.1.5
+
+- Fixed statistics controller in admin
+
 # 1.1.4
 
 - Added ShareBasketCleanupCriteriaEvent
