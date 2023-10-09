@@ -1,6 +1,6 @@
 {
     "name": "frosh/platform-share-basket",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "type": "shopware-platform-plugin",
     "description": "Shopware Plugin to share your basket",
     "license": "MIT",
