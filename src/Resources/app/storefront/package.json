@@ -9,6 +9,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@friendsofshopware/storefront-sdk": "^0.1.1"
+    "@friendsofshopware/storefront-types": "^0.1.1"
   }
 }
