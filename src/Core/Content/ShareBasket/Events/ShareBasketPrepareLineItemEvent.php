@@ -14,26 +14,45 @@ class ShareBasketPrepareLineItemEvent extends Event
 
     /**
      * @param array{
-     *     identifier:string,
+     *     identifier: string,
      *     quantity: int,
      *     type: string,
      *     removable: bool,
      *     stackable: bool,
-     *     payload: array|null
+     *     payload: array<string, mixed>|null
      * } $shareBasketLineItem
      */
     public function __construct(
         private array $shareBasketLineItem,
         private readonly LineItem $lineItem,
         private readonly SalesChannelContext $salesChannelContext
-    ) {
-    }
+    ) {}
 
+    /**
+     * @return array{
+     *     identifier: string,
+     *     quantity: int,
+     *     type: string,
+     *     removable: bool,
+     *     stackable: bool,
+     *     payload: array<string, mixed>|null
+     * }
+     */
     public function getShareBasketLineItem(): array
     {
         return $this->shareBasketLineItem;
     }
 
+    /**
+     * @param array{
+     *     identifier: string,
+     *     quantity: int,
+     *     type: string,
+     *     removable: bool,
+     *     stackable: bool,
+     *     payload: array<string, mixed>|null
+     * } $shareBasketLineItem
+     */
     public function setShareBasketLineItem(array $shareBasketLineItem): void
     {
         $this->shareBasketLineItem = $shareBasketLineItem;
@@ -44,6 +63,7 @@ class ShareBasketPrepareLineItemEvent extends Event
         return $this->lineItem;
     }
 
+    /* @phpstan-ignore-next-line */
     private function getSalesChannelContext(): SalesChannelContext
     {
         return $this->salesChannelContext;

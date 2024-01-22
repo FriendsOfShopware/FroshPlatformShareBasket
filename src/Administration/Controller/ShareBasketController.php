@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Frosh\ShareBasket\Administration\Controller;
@@ -16,9 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(defaults: ['_routeScope' => ['api']])]
 class ShareBasketController extends AbstractController
 {
-    public function __construct(private readonly Connection $connection)
-    {
-    }
+    public function __construct(private readonly Connection $connection) {}
 
     #[Route(path: '/api/frosh/sharebasket/statistics', name: 'api.action.frosh.share-basket.statistics', methods: ['POST'])]
     public function statistics(Request $request, Context $context): Response

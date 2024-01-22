@@ -3,41 +3,8 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
-   <imports>
-       <import resource="services_command.xml"/>
-       <import resource="services_controller.xml"/>
-       <import resource="services_subscriber.xml"/>
-       <import resource="services_task.xml"/>
-   </imports>
-
     <services>
-
-        <service id="Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketDefinition">
-            <tag name="shopware.entity.definition" entity="frosh_share_basket"/>
-        </service>
-        <service id="Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem\ShareBasketLineItemDefinition">
-            <tag name="shopware.entity.definition" entity="frosh_share_basket_line_item"/>
-        </service>
-
-        <service id="Frosh\ShareBasket\Services\ShareBasketService">
-            <argument id="Shopware\Core\Checkout\Cart\SalesChannel\CartService" type="service"/>
-            <argument id="frosh_share_basket.repository" type="service"/>
-            <argument id="Shopware\Storefront\Framework\Routing\Router" type="service"/>
-            <argument id="sales_channel.product.repository" type="service"/>
-            <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
-            <argument id="event_dispatcher" type="service"/>
-        </service>
-
-        <service id="Frosh\ShareBasket\Services\ShareBasketServiceInterface" alias="Frosh\ShareBasket\Services\ShareBasketService" />
-
-        <service id="Frosh\ShareBasket\Core\Content\Product\ProductShareBasketExtension">
-            <tag name="shopware.entity.extension"/>
-        </service>
-
-        <service id="Frosh\ShareBasket\Core\System\SalesChannel\SalesChannelShareBasketExtension">
-            <tag name="shopware.entity.extension"/>
-        </service>
-
+        <defaults autowire="true" autoconfigure="true" />
+        <prototype namespace="Frosh\ShareBasket\" resource="../../" exclude="../../{DependencyInjection,Resources,Migration,FroshPlatformShareBasket.php}" />
     </services>
 </container>

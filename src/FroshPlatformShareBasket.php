@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Frosh\ShareBasket;
@@ -6,18 +7,27 @@ namespace Frosh\ShareBasket;
 use Doctrine\DBAL\Connection;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class FroshPlatformShareBasket extends Plugin
 {
-    public function uninstall(UninstallContext $context): void
+    public function uninstall(UninstallContext $uninstallContext): void
     {
-        parent::uninstall($context);
+        parent::uninstall($uninstallContext);
 
-        if ($context->keepUserData()) {
+        if ($uninstallContext->keepUserData()) {
+            return;
+        }
+
+        if(!$this->container instanceof ContainerInterface) {
             return;
         }
 
         $connection = $this->container->get(Connection::class);
+        if(!$connection instanceof Connection) {
+            return;
+        }
+
         $connection->executeStatement('SET foreign_key_checks = 0;');
         $connection->executeStatement('DROP TABLE IF EXISTS `frosh_share_basket`');
         $connection->executeStatement('DROP TABLE IF EXISTS `frosh_share_basket_line_item`');
