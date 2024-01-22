@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem;
@@ -30,6 +31,9 @@ class ShareBasketLineItemEntity extends Entity
 
     protected ProductEntity $product;
 
+    /**
+     * @var array<string>|null
+     */
     protected ?array $payload = null;
 
     protected string $lineItemIdentifier;
@@ -114,11 +118,17 @@ class ShareBasketLineItemEntity extends Entity
         $this->product = $product;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getPayload(): ?array
     {
         return $this->payload;
     }
 
+    /**
+     * @param array<string, mixed>|null $payload
+     */
     public function setPayload(?array $payload): void
     {
         $this->payload = $payload;

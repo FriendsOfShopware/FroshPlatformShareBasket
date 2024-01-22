@@ -21,7 +21,6 @@ export default class FroshShareBasketButtons extends PluginBaseClass {
         this.#registerEvents();
     }
 
-    // can be removed after 6.6
     init() {}
 
     #registerEvents() {

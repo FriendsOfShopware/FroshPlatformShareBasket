@@ -1,6 +1,6 @@
 {
     "name": "frosh/platform-share-basket",
-    "version": "1.1.6",
+    "version": "2.0.0",
     "type": "shopware-platform-plugin",
     "description": "Shopware Plugin to share your basket",
     "license": "MIT",
@@ -36,8 +36,12 @@
         }
     },
     "require": {
-        "shopware/core": "~6.5.0",
-        "shopware/administration": "~6.5.0",
-        "shopware/storefront": "~6.5.0"
+        "shopware/core": "~6.6.0",
+        "shopware/administration": "~6.6.0",
+        "shopware/storefront": "~6.6.0"
+    },
+    "scripts": {
+        "cs-fix": "docker run --rm -v $(pwd):$(pwd) -w $(pwd) oskarstark/php-cs-fixer-ga --rules @PER-CS2.0,@PER-CS2.0:risky --allow-risky=yes .",
+        "phpstan": "docker run --rm -v $(pwd):/app aragon999/phpstan-shopware:v6.6.0.0-rc1 analyse --level max ."
     }
 }

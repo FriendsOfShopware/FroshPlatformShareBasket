@@ -11,9 +11,7 @@ class ShareBasketCleanupCriteriaEvent extends Event
 {
     public function __construct(
         private readonly Criteria $criteria,
-    )
-    {
-    }
+    ) {}
 
     public function getCriteria(): Criteria
     {

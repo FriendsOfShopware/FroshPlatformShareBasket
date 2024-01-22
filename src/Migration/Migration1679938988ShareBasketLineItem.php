@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Frosh\ShareBasket\Migration;
@@ -22,7 +23,5 @@ class Migration1679938988ShareBasketLineItem extends MigrationStep
         $connection->executeStatement($sql);
     }
 
-    public function updateDestructive(Connection $connection): void
-    {
-    }
+    public function updateDestructive(Connection $connection): void {}
 }

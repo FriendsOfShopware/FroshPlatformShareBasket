@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Frosh\ShareBasket\Storefront\Controller;
@@ -13,9 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(defaults: ['_routeScope' => ['storefront']])]
 class ShareBasketController extends StorefrontController
 {
-    public function __construct(private readonly ShareBasketServiceInterface $shareBasketService)
-    {
-    }
+    public function __construct(private readonly ShareBasketServiceInterface $shareBasketService) {}
 
     #[Route(path: '/sharebasket/save', name: 'frontend.frosh.share-basket.save', options: ['seo' => false], defaults: ['XmlHttpRequest' => true], methods: ['POST'])]
     public function save(Request $request, SalesChannelContext $context): Response
