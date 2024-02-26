@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "types": ["@friendsofshopware/storefront-types"],
+        "types": ["@shopware-ag/storefront-types"],
         "target": "ES2020",
         "module": "CommonJS"
     }
