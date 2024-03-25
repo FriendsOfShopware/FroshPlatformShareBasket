@@ -28,9 +28,7 @@ class FroshPlatformShareBasket extends Plugin
             return;
         }
 
-        $connection->executeStatement('SET foreign_key_checks = 0;');
-        $connection->executeStatement('DROP TABLE IF EXISTS `frosh_share_basket`');
         $connection->executeStatement('DROP TABLE IF EXISTS `frosh_share_basket_line_item`');
-        $connection->executeStatement('SET foreign_key_checks = 1;');
+        $connection->executeStatement('DROP TABLE IF EXISTS `frosh_share_basket`');
     }
 }
