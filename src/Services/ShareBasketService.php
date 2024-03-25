@@ -160,7 +160,7 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
 
         return [
             'basketId' => $this->generateShareBasketId(),
-            'hash' => sha1(serialize($lineItems)),
+            'hash' => sha1(serialize($lineItems) . $salesChannelContext->getSalesChannelId()),
             'salesChannelId' => $salesChannelContext->getSalesChannel()->getId(),
             'lineItems' => $lineItems,
         ];
