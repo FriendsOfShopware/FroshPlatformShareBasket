@@ -21,7 +21,7 @@ class SalesChannelShareBasketExtension extends EntityExtension
             (new OneToManyAssociationField(
                 'shareBaskets',
                 ShareBasketDefinition::class,
-                'sales_channel_id'
+                'sales_channel_id',
             ))->addFlags(new CascadeDelete()),
         );
     }

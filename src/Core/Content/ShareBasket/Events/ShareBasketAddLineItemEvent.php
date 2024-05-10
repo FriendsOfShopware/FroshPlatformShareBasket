@@ -16,7 +16,7 @@ class ShareBasketAddLineItemEvent extends Event
     public function __construct(
         private readonly Cart $cart,
         private readonly SalesChannelContext $salesChannelContext,
-        private readonly ShareBasketLineItemEntity $shareBasketLineItemEntity
+        private readonly ShareBasketLineItemEntity $shareBasketLineItemEntity,
     ) {}
 
     public function getCart(): Cart

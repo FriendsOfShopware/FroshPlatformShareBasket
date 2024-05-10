@@ -18,7 +18,7 @@ class ShareBasketCleanupTaskHandler extends ScheduledTaskHandler
      */
     public function __construct(
         EntityRepository $scheduledTaskRepository,
-        private readonly ShareBasketServiceInterface $shareBasketService
+        private readonly ShareBasketServiceInterface $shareBasketService,
     ) {
         parent::__construct($scheduledTaskRepository);
     }

@@ -22,7 +22,7 @@ class ProductShareBasketExtension extends EntityExtension
                 'product_number',
                 'identifier',
                 ShareBasketLineItemDefinition::class,
-                false
+                false,
             ),
         );
     }

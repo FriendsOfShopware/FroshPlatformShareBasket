@@ -25,7 +25,7 @@ class ShareBasketPrepareLineItemEvent extends Event
     public function __construct(
         private array $shareBasketLineItem,
         private readonly LineItem $lineItem,
-        private readonly SalesChannelContext $salesChannelContext
+        private readonly SalesChannelContext $salesChannelContext,
     ) {}
 
     /**
@@ -63,8 +63,7 @@ class ShareBasketPrepareLineItemEvent extends Event
         return $this->lineItem;
     }
 
-    /* @phpstan-ignore-next-line */
-    private function getSalesChannelContext(): SalesChannelContext
+    public function getSalesChannelContext(): SalesChannelContext
     {
         return $this->salesChannelContext;
     }

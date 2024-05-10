@@ -47,7 +47,7 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
         #[Autowire(service: 'sales_channel.product.repository')]
         private SalesChannelRepository   $productRepository,
         private SystemConfigService      $systemConfigService,
-        private EventDispatcherInterface $eventDispatcher
+        private EventDispatcherInterface $eventDispatcher,
     ) {}
 
     /**
@@ -177,14 +177,14 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
             'createdAt',
             [
                 RangeFilter::LTE => $dateTime->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-            ]
+            ],
         ));
 
         $criteria->addAssociation('lineItems');
 
         $this->eventDispatcher->dispatch(
             new ShareBasketCleanupCriteriaEvent($criteria),
-            ShareBasketCleanupCriteriaEvent::class
+            ShareBasketCleanupCriteriaEvent::class,
         );
 
         $shareBasketEntities = $this->froshShareBasketRepository->searchIds($criteria, Context::createDefaultContext());
@@ -201,7 +201,7 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
     private function addLineItems(
         Cart                $cart,
         SalesChannelContext $salesChannelContext,
-        ShareBasketEntity   $shareBasketEntity
+        ShareBasketEntity   $shareBasketEntity,
     ): void {
         foreach ($shareBasketEntity->getLineItems() as $shareBasketLineItemEntity) {
             try {
@@ -256,7 +256,7 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
         return $this->router->generate(
             'frontend.frosh.share-basket.load',
             ['basketId' => $basketId],
-            UrlGeneratorInterface::ABSOLUTE_URL
+            UrlGeneratorInterface::ABSOLUTE_URL,
         );
     }
 
@@ -277,7 +277,7 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
     private function addProduct(
         Cart                      $cart,
         SalesChannelContext       $salesChannelContext,
-        ShareBasketLineItemEntity $shareBasketLineItemEntity
+        ShareBasketLineItemEntity $shareBasketLineItemEntity,
     ): void {
         $productId = $this->getProductIdByNumber($shareBasketLineItemEntity->getIdentifier(), $salesChannelContext);
 
@@ -289,7 +289,7 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
             $shareBasketLineItemEntity->getLineItemIdentifier(),
             $shareBasketLineItemEntity->getType(),
             $productId,
-            $shareBasketLineItemEntity->getQuantity()
+            $shareBasketLineItemEntity->getQuantity(),
         );
         $this->setPayloadValues($shareBasketLineItemEntity->getPayload() ?? [], $lineItem);
         $lineItem->setStackable($shareBasketLineItemEntity->isStackable());
@@ -301,11 +301,11 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
     private function addPromotion(
         Cart                      $cart,
         SalesChannelContext       $salesChannelContext,
-        ShareBasketLineItemEntity $shareBasketLineItemEntity
+        ShareBasketLineItemEntity $shareBasketLineItemEntity,
     ): void {
         $itemBuilder = new PromotionItemBuilder();
         $lineItem = $itemBuilder->buildPlaceholderItem(
-            $shareBasketLineItemEntity->getIdentifier()
+            $shareBasketLineItemEntity->getIdentifier(),
         );
         $this->cartService->add($cart, $lineItem, $salesChannelContext);
     }
