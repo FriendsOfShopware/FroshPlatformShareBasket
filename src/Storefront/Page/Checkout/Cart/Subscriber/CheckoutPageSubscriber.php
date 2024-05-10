@@ -42,7 +42,7 @@ class CheckoutPageSubscriber implements EventSubscriberInterface
                     'froshShareBasketUrl' => $this->shareBasketService->saveCart(
                         $event->getRequest(),
                         $shareBasketData,
-                        $event->getSalesChannelContext()
+                        $event->getSalesChannelContext(),
                     ),
                 ]);
             }

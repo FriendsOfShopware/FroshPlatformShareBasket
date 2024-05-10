@@ -33,7 +33,7 @@ class ShareBasketController extends StorefrontController
             [
                 'froshShareBasketState' => $froshShareBasketState,
                 'froshShareBasketUrl' => $froshShareBasketUrl,
-            ]
+            ],
         );
     }
 
@@ -51,7 +51,7 @@ class ShareBasketController extends StorefrontController
 
         return $this->forwardToRoute(
             'frontend.checkout.cart.page',
-            ['froshShareBasketState' => $froshShareBasketState]
+            ['froshShareBasketState' => $froshShareBasketState],
         );
     }
 }

@@ -25,7 +25,7 @@ class ShareBasketPrepareLineItemEvent extends Event
     public function __construct(
         private array $shareBasketLineItem,
         private readonly LineItem $lineItem,
-        private readonly SalesChannelContext $salesChannelContext
+        private readonly SalesChannelContext $salesChannelContext,
     ) {}
 
     /**

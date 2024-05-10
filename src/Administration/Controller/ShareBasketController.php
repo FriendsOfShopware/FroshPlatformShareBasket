@@ -35,32 +35,32 @@ class ShareBasketController extends AbstractController
                 'SUM(1 * save_count) as saveCount',
                 'SUM(froshShareBasketLineItem.quantity * save_count) as totalQuantity',
                 'IFNULL(translation.name, translationDefault.name) as productName',
-            ]
+            ],
         )
             ->from('frosh_share_basket', 'shareBasket')
             ->innerJoin(
                 'shareBasket',
                 'frosh_share_basket_line_item',
                 'froshShareBasketLineItem',
-                'shareBasket.id = froshShareBasketLineItem.share_basket_id'
+                'shareBasket.id = froshShareBasketLineItem.share_basket_id',
             )
             ->leftJoin(
                 'froshShareBasketLineItem',
                 'product',
                 'product',
-                'froshShareBasketLineItem.identifier = product.product_number'
+                'froshShareBasketLineItem.identifier = product.product_number',
             )
             ->leftJoin(
                 'product',
                 'product_translation',
                 'translation',
-                'product.id = translation.product_id AND translation.language_id = :language'
+                'product.id = translation.product_id AND translation.language_id = :language',
             )
             ->leftJoin(
                 'product',
                 'product_translation',
                 'translationDefault',
-                'product.id = translationDefault.product_id AND translationDefault.language_id = :defaultLanguage'
+                'product.id = translationDefault.product_id AND translationDefault.language_id = :defaultLanguage',
             )
             ->where('froshShareBasketLineItem.type = :type')
             ->groupBy('froshShareBasketLineItem.identifier')
@@ -73,7 +73,7 @@ class ShareBasketController extends AbstractController
         foreach ($request->get('sortings') as $condition) {
             $query->addOrderBy(
                 $condition['field'],
-                $condition['order']
+                $condition['order'],
             );
         }
 
