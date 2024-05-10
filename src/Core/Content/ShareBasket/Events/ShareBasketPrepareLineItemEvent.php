@@ -63,8 +63,7 @@ class ShareBasketPrepareLineItemEvent extends Event
         return $this->lineItem;
     }
 
-    /* @phpstan-ignore-next-line */
-    private function getSalesChannelContext(): SalesChannelContext
+    public function getSalesChannelContext(): SalesChannelContext
     {
         return $this->salesChannelContext;
     }
