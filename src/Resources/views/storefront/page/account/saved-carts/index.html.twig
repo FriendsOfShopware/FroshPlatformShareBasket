@@ -1,0 +1,51 @@
+{% sw_extends '@storefront/storefront/page/account/_page.html.twig' %}
+
+{% block page_account_main_content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">{{ "frosh-share-basket.savedCarts"|trans }}</h1>
+
+        {% block page_account_saved_basket_content %}
+            {% if froshSavedBaskets|length == 0 %}
+                <p class="alert alert-info">{{ 'frosh-share-basket.noSavedCarts'|trans }}</p>
+            {% else %}
+                {% for basket in froshSavedBaskets %}
+                    <h2>{{ "frosh-share-basket.cartId"|trans({'%cartId%': basket.basketId}) }}</h2>
+
+                    <a href="{{ path('frontend.frosh.share-basket.load', { basketId: basket.basketId }) }}" class="btn btn-primary btn-sm">{{ 'frosh-share-basket.restoreCart'|trans }}</a>
+                    <a href="{{ path('frontend.frosh.share-basket.account.saved-carts-delete', { id: basket.id }) }}" class="btn btn-danger btn-sm">{{ 'frosh-share-basket.removeCart'|trans }}</a>
+
+                    <table class="table table-striped mt-3 saved-cart-table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">{{ 'frosh-share-basket.product'|trans }}</th>
+                                <th scope="col">{{ 'frosh-share-basket.productNumber'|trans }}</th>
+                                <th scope="col">{{ 'frosh-share-basket.productQuantity'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lineItem in basket.lineItems %}
+                                <tr class="align-middle">
+                                    <td class="product-image">
+                                        <img src="{{ lineItem.product.cover.media.url }}" alt="{{ lineItem.product.translated.name }}" title="{{ lineItem.product.translated.name }}" />
+                                    </td>
+                                    <td>
+                                        <a href="{{ url('frontend.detail.page', {productId: lineItem.product.id}) }}">
+                                            {{ lineItem.product.translated.name }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ url('frontend.detail.page', {productId: lineItem.product.id}) }}">
+                                            {{ lineItem.product.productNumber }}
+                                        </a>
+                                    </td>
+                                    <td>{{ lineItem.quantity }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endfor %}
+            {% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}

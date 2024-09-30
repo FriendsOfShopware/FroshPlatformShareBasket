@@ -13,11 +13,18 @@
 
     <services>
 
+        <service id="Frosh\ShareBasket\Core\Content\Customer\CustomerExtension">
+            <tag name="shopware.entity.extension"/>
+        </service>
+
         <service id="Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketDefinition">
             <tag name="shopware.entity.definition" entity="frosh_share_basket"/>
         </service>
         <service id="Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem\ShareBasketLineItemDefinition">
             <tag name="shopware.entity.definition" entity="frosh_share_basket_line_item"/>
+        </service>
+        <service id="Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketCustomer\ShareBasketCustomerDefinition">
+            <tag name="shopware.entity.definition" entity="frosh_share_basket_customer"/>
         </service>
 
         <service id="Frosh\ShareBasket\Services\ShareBasketService">
@@ -27,9 +34,17 @@
             <argument id="sales_channel.product.repository" type="service"/>
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
             <argument id="event_dispatcher" type="service"/>
+            <argument id="frosh_share_basket_customer.repository" type="service"/>
         </service>
 
         <service id="Frosh\ShareBasket\Services\ShareBasketServiceInterface" alias="Frosh\ShareBasket\Services\ShareBasketService" />
+
+        <service id="Frosh\ShareBasket\Services\CustomerShareBasketService">
+            <argument id="frosh_share_basket.repository" type="service"/>
+            <argument id="frosh_share_basket_customer.repository" type="service"/>
+        </service>
+
+        <service id="Frosh\ShareBasket\Services\CustomerShareBasketServiceInterface" alias="Frosh\ShareBasket\Services\CustomerShareBasketService" />
 
         <service id="Frosh\ShareBasket\Core\Content\Product\ProductShareBasketExtension">
             <tag name="shopware.entity.extension"/>

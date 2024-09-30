@@ -11,6 +11,16 @@
         "email": "Email",
         "facebook": "Facebook",
         "whatsapp": "WhatsApp",
-        "webshare": "Share ..."
+        "webshare": "Share ...",
+        "savedCarts": "Saved carts",
+        "noSavedCarts": "There is no saved shopping cart.",
+        "cartId": "Cart ID (%cartId%)",
+        "restoreCart": "Restore cart",
+        "removeCart": "Remove cart",
+        "product": "Product",
+        "productNumber": "Product number",
+        "productQuantity": "Quantity",
+        "savedCartsOverviewDisabled": "Saved carts overview are disabled.",
+        "cartRemoved": "Cart removed"
     }
 }

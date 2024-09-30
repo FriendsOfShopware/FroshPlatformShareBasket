@@ -7,6 +7,7 @@ use Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem\Sha
 use Frosh\ShareBasket\Core\Content\ShareBasket\Events\ShareBasketAddLineItemEvent;
 use Frosh\ShareBasket\Core\Content\ShareBasket\Events\ShareBasketCleanupCriteriaEvent;
 use Frosh\ShareBasket\Core\Content\ShareBasket\Events\ShareBasketPrepareLineItemEvent;
+use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketCollection;
 use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketDefinition;
 use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketEntity;
 use Shopware\Core\Checkout\Cart\Cart;
@@ -22,6 +23,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
+use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -38,15 +40,18 @@ class ShareBasketService implements ShareBasketServiceInterface
         private readonly RouterInterface $router,
         private readonly SalesChannelRepository $productRepository,
         private readonly SystemConfigService $systemConfigService,
-        private readonly EventDispatcherInterface $eventDispatcher
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly EntityRepository $shareBasketCustomerRepository,
     ) {
     }
 
     public function saveCart(Request $request, array $data, SalesChannelContext $salesChannelContext): ?string
     {
         $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('salesChannelId', $salesChannelContext->getSalesChannel()->getId()));
-        $criteria->addFilter(new EqualsFilter('hash', $data['hash']));
+        $criteria
+            ->addFilter(new EqualsFilter('salesChannelId', $salesChannelContext->getSalesChannelId()))
+            ->addFilter(new EqualsFilter('hash', $data['hash']))
+        ;
 
         $shareBasketEntity = $this->shareBasketRepository->search($criteria, $salesChannelContext->getContext())->first();
         if ($shareBasketEntity instanceof ShareBasketEntity) {
@@ -60,10 +65,12 @@ class ShareBasketService implements ShareBasketServiceInterface
             $this->shareBasketRepository->update([$data], $salesChannelContext->getContext());
             $request->getSession()->set('froshShareBasketHash', $data['hash']);
 
+            $this->persistSavedCartToCustomer($shareBasketEntity->getId(), $salesChannelContext);
+
             return $this->generateBasketUrl($data['basketId']);
         }
 
-        return $this->persistCart($request, $salesChannelContext->getContext(), $data);
+        return $this->persistCart($request, $salesChannelContext, $data);
     }
 
     public function loadCart(Request $request, SalesChannelContext $salesChannelContext): ?Cart
@@ -208,18 +215,23 @@ class ShareBasketService implements ShareBasketServiceInterface
         }
     }
 
-    private function persistCart(Request $request, Context $context, array $data, int $attempts = 0): ?string
+    private function persistCart(Request $request, SalesChannelContext $salesChannelContext, array $data, int $attempts = 0): ?string
     {
         if ($attempts > 3) {
             return null;
         }
 
         try {
-            $result = $this->shareBasketRepository->create([$data], $context);
+            $id = Uuid::randomHex();
+            $data['id'] = $id;
+            $result = $this->shareBasketRepository->create([$data], $salesChannelContext->getContext());
+
+            $this->persistSavedCartToCustomer($id, $salesChannelContext);
+
         } catch (\Exception) {
             $data['basketId'] = $this->generateShareBasketId();
 
-            return $this->persistCart($request, $context, $data, ++$attempts);
+            return $this->persistCart($request, $salesChannelContext, $data, ++$attempts);
         }
 
         $event = $result->getEventByEntityName(ShareBasketDefinition::ENTITY_NAME);
@@ -232,6 +244,19 @@ class ShareBasketService implements ShareBasketServiceInterface
         $request->getSession()->set('froshShareBasketHash', $data['hash']);
 
         return $this->generateBasketUrl($data['basketId']);
+    }
+
+    private function persistSavedCartToCustomer(string $shareBasketId, SalesChannelContext $salesChannelContext): void
+    {
+        $customerId = $salesChannelContext->getCustomerId();
+        if ($customerId === null) {
+            return;
+        }
+
+        $this->shareBasketCustomerRepository->upsert([[
+            'shareBasketId' => $shareBasketId,
+            'customerId' => $customerId,
+        ]], $salesChannelContext->getContext());
     }
 
     private function generateBasketUrl(string $basketId): string
