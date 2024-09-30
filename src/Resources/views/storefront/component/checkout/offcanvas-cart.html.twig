@@ -1,0 +1,39 @@
+{% sw_extends '@Storefront/storefront/component/checkout/offcanvas-cart.html.twig' %}
+
+{% block component_offcanvas_cart_actions_cart %}
+    {{ parent() }}
+
+    {% if config('FroshPlatformShareBasket.config.showSaveCartButtonInOffcanvas') %}
+        {% block frosh_share_basket_offcanvas %}
+            {% if page.froshShareBasketState == 'cartExists' %}
+                {% block frosh_share_basket_offcanvas_existing_cart %}
+                    {% sw_include '@Storefront/storefront/utilities/frosh-share-basket.html.twig' with {
+                        froshShareBasketUrl: page.froshShareBasketUrl,
+                        froshShareBasketState: page.froshShareBasketState,
+                    } %}
+                {% endblock %}
+            {% elseif page.froshShareBasketState != 'cartLoaded' %}
+                {% set froshBasketAjaxSubmitOptions = {
+                    replaceSelectors: ".js-frosh-share-basket-container",
+                    submitOnce: true,
+                } %}
+
+                {% block frosh_share_basket_offcanvas_form %}
+                    <div class="js-frosh-share-basket-container" data-frosh-share-basket-buttons="true">
+                        <form action="{{ path('frontend.frosh.share-basket.save') }}"
+                              method="post"
+                              class="js-frosh-share-basket-form"
+                              data-form-ajax-submit="true"
+                              data-form-ajax-submit-options="{{ froshBasketAjaxSubmitOptions|json_encode }}">
+                            {% block frosh_share_basket_offcanvas_save_button %}
+                                <button type="submit" class="btn btn-link w-100">
+                                    {{ "frosh-share-basket.saveCart"|trans }}
+                                </button>
+                            {% endblock %}
+                        </form>
+                    </div>
+                {% endblock %}
+            {% endif %}
+        {% endblock %}
+    {% endif %}
+{% endblock %}
