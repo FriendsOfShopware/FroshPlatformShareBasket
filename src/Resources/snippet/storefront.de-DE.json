@@ -11,6 +11,16 @@
         "email": "E-Mail",
         "facebook": "Facebook",
         "whatsapp": "WhatsApp",
-        "webshare": "Teilen ..."
+        "webshare": "Teilen ...",
+        "savedCarts": "Gespeicherte Warenkörbe",
+        "noSavedCarts": "Es gibt keinen gespeicherten Warenkorb.",
+        "cartId": "Warenkorb ID (%cartId%)",
+        "restoreCart": "Warenkorb wiederherstellen",
+        "removeCart": "Warenkorb entfernen",
+        "product": "Produkt",
+        "productNumber": "Produktnummer",
+        "productQuantity": "Anzahl",
+        "savedCartsOverviewDisabled": "Die Übersicht der gespeicherten Warenkörbe ist deaktiviert.",
+        "cartRemoved": "Warenkorb entfernt"
     }
 }
