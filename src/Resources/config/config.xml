@@ -41,5 +41,12 @@
             <description>Enables the native sharing feature on supported devices.</description>
             <description lang="de-DE">Aktiviert die native Teilen-Funktion auf unterstützten Endgeräten.</description>
         </input-field>
+
+        <input-field type="bool">
+            <name>showSavedCartsInCustomerAccount</name>
+            <defaultValue>false</defaultValue>
+            <label>Show Saved Carts in Customer Account</label>
+            <label lang="de-DE">Gespeicherte Warenkörbe im Kundenkonto anzeigen</label>
+        </input-field>
     </card>
 </config>

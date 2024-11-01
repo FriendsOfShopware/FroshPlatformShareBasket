@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace Frosh\ShareBasket\Core\Content\ShareBasket;
 
+use Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketCustomer\ShareBasketCustomerDefinition;
 use Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem\ShareBasketLineItemDefinition;
+use PxswTheme\WurmB2BSuiteBundle\Core\Content\WurmB2BSuite\B2BSuiteSalesAgent\Aggregate\CustomerSalesAgent\CustomerSalesAgentDefinition;
+use Shopware\Core\Checkout\Customer\CustomerDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
@@ -11,6 +14,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
@@ -51,8 +55,10 @@ class ShareBasketDefinition extends EntityDefinition
             new IntField('save_count', 'saveCount'),
             new StringField('hash', 'hash'),
             (new FkField('sales_channel_id', 'salesChannelId', SalesChannelDefinition::class))->addFlags(new Required()),
+
             new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id'),
             (new OneToManyAssociationField('lineItems', ShareBasketLineItemDefinition::class, 'share_basket_id'))->addFlags(new CascadeDelete()),
+            (new ManyToManyAssociationField('customers', CustomerDefinition::class, ShareBasketCustomerDefinition::class, 'share_basket_id', 'customer_id')),
         ]);
     }
 }
