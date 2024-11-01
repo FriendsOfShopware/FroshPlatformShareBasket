@@ -1,42 +1,45 @@
 {% sw_extends '@Storefront/storefront/page/checkout/cart/index.html.twig' %}
 
 {% block page_checkout_cart_product_table %}
-    <div class="container mb-3">
-        <div class="row">
-            <div class="p-0 col-sm-12 col-md-8 col-lg-6">
-
-                {% if page.froshShareBasketState == 'cartExists' %}
-
-                    {% sw_include '@Storefront/storefront/utilities/frosh-share-basket.html.twig' with {
-                        froshShareBasketUrl: page.froshShareBasketUrl,
-                        froshShareBasketState: page.froshShareBasketState,
-                    } %}
-
-                {% elseif page.froshShareBasketState != 'cartLoaded' %}
-
-                    <div class="js-frosh-share-basket-container" data-frosh-share-basket-buttons="true">
-                        <form action="{{ path('frontend.frosh.share-basket.save') }}"
-                              method="post"
-                              class="js-frosh-share-basket-form"
-                              data-form-ajax-submit="true"
-                              data-form-ajax-submit-options='{
-                                "replaceSelectors": ".js-frosh-share-basket-container",
-                                "submitOnce": true
-                              }'>
-
-                            {% block frosh_share_basket_save_button %}
-                                <button type="submit" class="btn btn-primary">
-                                    {{ "frosh-share-basket.saveCart"|trans }}
-                                </button>
+    {% block frosh_share_basket_container %}
+        <div class="container mb-3">
+            <div class="row">
+                <div class="p-0 col-sm-12 col-md-8 col-lg-6">
+                    {% block frosh_share_basket %}
+                        {% if page.froshShareBasketState == 'cartExists' %}
+                            {% block frosh_share_basket_existing_cart %}
+                                {% sw_include '@Storefront/storefront/utilities/frosh-share-basket.html.twig' with {
+                                    froshShareBasketUrl: page.froshShareBasketUrl,
+                                    froshShareBasketState: page.froshShareBasketState,
+                                } %}
                             {% endblock %}
-                        </form>
-                    </div>
+                        {% elseif page.froshShareBasketState != 'cartLoaded' %}
+                            {% set froshBasketAjaxSubmitOptions = {
+                                replaceSelectors: ".js-frosh-share-basket-container",
+                                submitOnce: true,
+                            } %}
 
-                {% endif %}
+                            {% block frosh_share_basket_form %}
+                                <div class="js-frosh-share-basket-container" data-frosh-share-basket-buttons="true">
+                                    <form action="{{ path('frontend.frosh.share-basket.save') }}"
+                                          method="post"
+                                          class="js-frosh-share-basket-form"
+                                          data-form-ajax-submit="true"
+                                          data-form-ajax-submit-options="{{ froshBasketAjaxSubmitOptions|json_encode }}">
+                                        {% block frosh_share_basket_save_button %}
+                                            <button type="submit" class="btn btn-primary">
+                                                {{ "frosh-share-basket.saveCart"|trans }}
+                                            </button>
+                                        {% endblock %}
+                                    </form>
+                                </div>
+                            {% endblock %}
+                        {% endif %}
+                    {% endblock %}
+                </div>
             </div>
         </div>
-    </div>
+    {% endblock %}
 
     {{ parent() }}
-
 {% endblock %}
