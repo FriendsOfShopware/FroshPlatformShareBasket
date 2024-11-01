@@ -41,5 +41,12 @@
             <description>Enables the native sharing feature on supported devices.</description>
             <description lang="de-DE">Aktiviert die native Teilen-Funktion auf unterstützten Endgeräten.</description>
         </input-field>
+
+        <input-field type="bool">
+            <name>showSaveCartButtonInOffcanvas</name>
+            <defaultValue>false</defaultValue>
+            <label>Show "Save Cart" button in offcanvas cart</label>
+            <label lang="de-DE">"Warenkorb speichern" Button im Offcanvas-Warenkorb anzeigen</label>
+        </input-field>
     </card>
 </config>

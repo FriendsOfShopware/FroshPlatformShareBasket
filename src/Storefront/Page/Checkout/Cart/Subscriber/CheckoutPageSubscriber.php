@@ -6,6 +6,7 @@ namespace Frosh\ShareBasket\Storefront\Page\Checkout\Cart\Subscriber;
 
 use Frosh\ShareBasket\Services\ShareBasketServiceInterface;
 use Shopware\Storefront\Page\Checkout\Cart\CheckoutCartPageLoadedEvent;
+use Shopware\Storefront\Page\Checkout\Offcanvas\OffcanvasCartPageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CheckoutPageSubscriber implements EventSubscriberInterface
@@ -16,10 +17,11 @@ class CheckoutPageSubscriber implements EventSubscriberInterface
     {
         return [
             CheckoutCartPageLoadedEvent::class => 'onCartLoaded',
+            OffcanvasCartPageLoadedEvent::class => 'onCartLoaded',
         ];
     }
 
-    public function onCartLoaded(CheckoutCartPageLoadedEvent $event): void
+    public function onCartLoaded(CheckoutCartPageLoadedEvent|OffcanvasCartPageLoadedEvent $event): void
     {
         if (!$event->getRequest()->hasSession()) {
             return;
