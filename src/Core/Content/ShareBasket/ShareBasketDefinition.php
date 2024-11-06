@@ -5,7 +5,6 @@ namespace Frosh\ShareBasket\Core\Content\ShareBasket;
 
 use Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketCustomer\ShareBasketCustomerDefinition;
 use Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem\ShareBasketLineItemDefinition;
-use PxswTheme\WurmB2BSuiteBundle\Core\Content\WurmB2BSuite\B2BSuiteSalesAgent\Aggregate\CustomerSalesAgent\CustomerSalesAgentDefinition;
 use Shopware\Core\Checkout\Customer\CustomerDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;

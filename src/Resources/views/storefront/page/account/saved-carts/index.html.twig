@@ -6,7 +6,10 @@
 
         {% block page_account_saved_basket_content %}
             {% if froshSavedBaskets|length == 0 %}
-                <p class="alert alert-info">{{ 'frosh-share-basket.noSavedCarts'|trans }}</p>
+                {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
+                    type: 'info',
+                    content: 'frosh-share-basket.noSavedCarts'|trans
+                } %}
             {% else %}
                 {% for basket in froshSavedBaskets %}
                     <h2>{{ "frosh-share-basket.cartId"|trans({'%cartId%': basket.basketId}) }}</h2>
