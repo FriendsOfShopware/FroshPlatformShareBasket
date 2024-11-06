@@ -19,12 +19,12 @@ class FroshPlatformShareBasket extends Plugin
             return;
         }
 
-        if(!$this->container instanceof ContainerInterface) {
+        if (!$this->container instanceof ContainerInterface) {
             return;
         }
 
         $connection = $this->container->get(Connection::class);
-        if(!$connection instanceof Connection) {
+        if (!$connection instanceof Connection) {
             return;
         }
 
