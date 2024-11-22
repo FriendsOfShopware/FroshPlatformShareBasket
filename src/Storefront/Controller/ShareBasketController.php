@@ -61,8 +61,8 @@ class ShareBasketController extends StorefrontController
         );
     }
 
-    #[Route(path: 'account/saved-carts', name: 'frontend.frosh.share-basket.account.saved-carts', methods: ['GET'], defaults: ['_loginRequired' => true])]
-    public function accountLoadBaskets(SalesChannelContext $context): Response
+    #[Route(path: 'account/saved-carts', name: 'frontend.frosh.share-basket.account.saved-carts', methods: ['GET', 'POST'], defaults: ['_loginRequired' => true, 'XmlHttpRequest' => true])]
+    public function accountLoadBaskets(SalesChannelContext $context, Request $request): Response
     {
         $showSavedCarts = $this->systemConfigService->getBool(
             'FroshPlatformShareBasket.config.showSavedCartsInCustomerAccount',
@@ -78,7 +78,7 @@ class ShareBasketController extends StorefrontController
         return $this->renderStorefront(
             '@Storefront/storefront/page/account/saved-carts/index.html.twig',
             [
-                'froshSavedBaskets' => $this->customerShareBasketService->loadCustomerCarts($context),
+                'froshSavedBaskets' => $this->customerShareBasketService->loadCustomerCarts($context, (int) $request->get('p', 1)),
             ]
         );
     }

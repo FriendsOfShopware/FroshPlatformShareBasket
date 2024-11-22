@@ -11,6 +11,24 @@
                     content: 'frosh-share-basket.noSavedCarts'|trans
                 } %}
             {% else %}
+                {% set formAjaxSubmitOptions = {
+                    replaceSelectors: ".account-content-main",
+                    submitOnChange: true
+                } %}
+
+                {% block page_account_saved_basket_pagination %}
+                    <form class="account-orders-pagination-form float-end"
+                          action="{{ path('frontend.frosh.share-basket.account.saved-carts') }}"
+                          method="POST"
+                          data-form-ajax-submit="true"
+                          data-form-ajax-submit-options="{{ formAjaxSubmitOptions|json_encode }}">
+                        {% sw_include '@Storefront/storefront/component/pagination.html.twig' with {
+                            entities: froshSavedBaskets,
+                            criteria: froshSavedBaskets.criteria,
+                        } %}
+                    </form>
+                {% endblock %}
+
                 {% for basket in froshSavedBaskets %}
                     <h2>{{ "frosh-share-basket.cartId"|trans({'%cartId%': basket.basketId}) }}</h2>
 
