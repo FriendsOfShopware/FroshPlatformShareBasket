@@ -55,5 +55,12 @@
             <label>Show "Save Cart" button in offcanvas cart</label>
             <label lang="de-DE">"Warenkorb speichern" Button im Offcanvas-Warenkorb anzeigen</label>
         </input-field>
+
+        <input-field type="bool">
+            <name>showCartsFromAllSalesChannels</name>
+            <defaultValue>false</defaultValue>
+            <label>Display saved carts for customers from all sales channels</label>
+            <label lang="de-DE">Anzeige gespeicherter Warenkörbe für Kunden aus allen Vertriebskanälen</label>
+        </input-field>
     </card>
 </config>

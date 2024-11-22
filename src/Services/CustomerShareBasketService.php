@@ -9,12 +9,14 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class CustomerShareBasketService implements CustomerShareBasketServiceInterface
 {
     public function __construct(
         private readonly EntityRepository $shareBasketRepository,
         private readonly EntityRepository $shareBasketCustomerRepository,
+        private readonly SystemConfigService $systemConfigService
     ) {
     }
 
@@ -27,10 +29,13 @@ class CustomerShareBasketService implements CustomerShareBasketServiceInterface
 
         $criteria = new Criteria();
         $criteria
-            ->addFilter(new EqualsFilter('salesChannelId', $salesChannelContext->getSalesChannelId()))
             ->addFilter(new EqualsFilter('customers.id', $customerId))
             ->addAssociation('lineItems.product.cover')
         ;
+
+        if ($this->systemConfigService->getBool('FroshPlatformShareBasket.config.showCartsFromAllSalesChannels', $salesChannelContext->getSalesChannelId()) === false) {
+            $criteria->addFilter(new EqualsFilter('salesChannelId', $salesChannelContext->getSalesChannelId()));
+        }
 
         return $this->shareBasketRepository->search($criteria, $salesChannelContext->getContext())->getEntities();
     }
