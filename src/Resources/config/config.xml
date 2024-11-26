@@ -55,5 +55,12 @@
             <label>Show Saved Carts in Customer Account</label>
             <label lang="de-DE">Gespeicherte Warenkörbe im Kundenkonto anzeigen</label>
         </input-field>
+
+        <input-field type="bool">
+            <name>showCartsFromAllSalesChannels</name>
+            <defaultValue>false</defaultValue>
+            <label>Display saved carts for customers from all sales channels</label>
+            <label lang="de-DE">Anzeige gespeicherter Warenkörbe für Kunden aus allen Vertriebskanälen</label>
+        </input-field>
     </card>
 </config>
