@@ -1,30 +1,30 @@
 .frosh-share-basket--buttons {
-    .btn-share-basket-whatsapp {
-        background-color: #32B322;
-        color: #FFF;
+  .btn-share-basket-whatsapp {
+    background-color: #32b322;
+    color: #fff;
 
-        &:hover {
-            background-color: darken(#32B322, 10%);
-        }
+    &:hover {
+      background-color: darken(#32b322, 10%);
     }
+  }
 
-    .btn-share-basket-facebook {
-        background-color: #4B6FBD;
-        color: #FFF;
+  .btn-share-basket-facebook {
+    background-color: #4b6fbd;
+    color: #fff;
 
-        &:hover {
-            background-color: darken(#4B6FBD, 10%);
-        }
+    &:hover {
+      background-color: darken(#4b6fbd, 10%);
     }
+  }
 
-    .btn-share-basket-webshare {
-        display: none;
-        background-color: #000;
-        color: #FFF;
-    }
+  .btn-share-basket-webshare {
+    display: none;
+    background-color: #000;
+    color: #fff;
+  }
 }
 
 .saved-cart-table .product-image img {
-    max-width: 80px;
-    max-height: 80px;
+  max-width: 80px;
+  max-height: 80px;
 }
