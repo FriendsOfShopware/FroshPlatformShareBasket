@@ -58,7 +58,7 @@ class ShareBasketDefinition extends EntityDefinition
 
             new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id'),
             (new OneToManyAssociationField('lineItems', ShareBasketLineItemDefinition::class, 'share_basket_id'))->addFlags(new CascadeDelete()),
-            (new ManyToManyAssociationField('customers', CustomerDefinition::class, ShareBasketCustomerDefinition::class, 'share_basket_id', 'customer_id')),
+            new ManyToManyAssociationField('customers', CustomerDefinition::class, ShareBasketCustomerDefinition::class, 'share_basket_id', 'customer_id'),
         ]);
     }
 }

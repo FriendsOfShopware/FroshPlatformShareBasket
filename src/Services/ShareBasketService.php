@@ -18,6 +18,7 @@ use Shopware\Core\Checkout\Promotion\Cart\PromotionItemBuilder;
 use Shopware\Core\Checkout\Promotion\Cart\PromotionProcessor;
 use Shopware\Core\Content\Product\ProductCollection;
 use Shopware\Core\Defaults;
+use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
@@ -45,16 +46,17 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
      * @param EntityRepository<EntityCollection<Entity>> $shareBasketCustomerRepository
      */
     public function __construct(
-        private CartService              $cartService,
-        private EntityRepository         $froshShareBasketRepository,
-        private RouterInterface          $router,
+        private CartService $cartService,
+        private EntityRepository $froshShareBasketRepository,
+        private RouterInterface $router,
         #[Autowire(service: 'sales_channel.product.repository')]
-        private SalesChannelRepository   $productRepository,
-        private SystemConfigService      $systemConfigService,
+        private SalesChannelRepository $productRepository,
+        private SystemConfigService $systemConfigService,
         private EventDispatcherInterface $eventDispatcher,
         #[Autowire(service: 'frosh_share_basket_customer.repository')]
-        private readonly EntityRepository $shareBasketCustomerRepository,
-    ) {}
+        private EntityRepository $shareBasketCustomerRepository,
+    ) {
+    }
 
     /**
      * @param array<mixed> $data
@@ -104,7 +106,7 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
         $shareBasketEntity = $this->froshShareBasketRepository->search($criteria, $salesChannelContext->getContext())->first();
 
         if (!$shareBasketEntity instanceof ShareBasketEntity) {
-            throw new \RuntimeException(sprintf('Could not found a shared basket with id %s', $basketId));
+            throw new \RuntimeException(\sprintf('Could not found a shared basket with id %s', $basketId));
         }
 
         $request->getSession()->set('froshShareBasketHash', $shareBasketEntity->getHash());
@@ -166,7 +168,7 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
             $lineItems[] = $shareBasketLineItem;
         }
 
-        usort($lineItems, static fn(array $a, array $b): int => strcmp((string) $a['identifier'], (string) $b['identifier']));
+        usort($lineItems, static fn (array $a, array $b): int => strcmp($a['identifier'], $b['identifier']));
 
         return [
             'basketId' => $this->generateShareBasketId(),
@@ -180,7 +182,7 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
     {
         $months = (int) $this->systemConfigService->get('ShareBasket.config.interval') ?: 6;
         $dateTime = new \DateTime();
-        $dateTime->modify(sprintf('-%s months', $months));
+        $dateTime->modify(\sprintf('-%s months', $months));
 
         $criteria = new Criteria();
         $criteria->addFilter(new RangeFilter(
@@ -197,21 +199,22 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
             ShareBasketCleanupCriteriaEvent::class,
         );
 
-        $shareBasketEntities = $this->froshShareBasketRepository->searchIds($criteria, Context::createDefaultContext());
+        $context = new Context(new SystemSource());
+        $shareBasketEntities = $this->froshShareBasketRepository->searchIds($criteria, $context);
 
-        if (empty($ids = $shareBasketEntities->getIds())) {
+        if (($ids = $shareBasketEntities->getIds()) === []) {
             return null;
         }
 
-        $ids = array_map(static fn($id) => ['id' => $id], $ids);
+        $ids = array_map(static fn ($id) => ['id' => $id], $ids);
 
-        return $this->froshShareBasketRepository->delete($ids, Context::createDefaultContext());
+        return $this->froshShareBasketRepository->delete($ids, $context);
     }
 
     private function addLineItems(
-        Cart                $cart,
+        Cart $cart,
         SalesChannelContext $salesChannelContext,
-        ShareBasketEntity   $shareBasketEntity,
+        ShareBasketEntity $shareBasketEntity,
     ): void {
         foreach ($shareBasketEntity->getLineItems() as $shareBasketLineItemEntity) {
             try {
@@ -302,8 +305,8 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
     }
 
     private function addProduct(
-        Cart                      $cart,
-        SalesChannelContext       $salesChannelContext,
+        Cart $cart,
+        SalesChannelContext $salesChannelContext,
         ShareBasketLineItemEntity $shareBasketLineItemEntity,
     ): void {
         $productId = $this->getProductIdByNumber($shareBasketLineItemEntity->getIdentifier(), $salesChannelContext);
@@ -326,8 +329,8 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
     }
 
     private function addPromotion(
-        Cart                      $cart,
-        SalesChannelContext       $salesChannelContext,
+        Cart $cart,
+        SalesChannelContext $salesChannelContext,
         ShareBasketLineItemEntity $shareBasketLineItemEntity,
     ): void {
         $itemBuilder = new PromotionItemBuilder();
