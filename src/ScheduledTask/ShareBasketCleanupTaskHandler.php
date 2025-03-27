@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Frosh\ShareBasket\ScheduledTask;
 
 use Frosh\ShareBasket\Services\ShareBasketServiceInterface;
+use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
@@ -19,8 +20,9 @@ class ShareBasketCleanupTaskHandler extends ScheduledTaskHandler
     public function __construct(
         EntityRepository $scheduledTaskRepository,
         private readonly ShareBasketServiceInterface $shareBasketService,
+        LoggerInterface $exceptionLogger,
     ) {
-        parent::__construct($scheduledTaskRepository);
+        parent::__construct($scheduledTaskRepository, $exceptionLogger);
     }
 
     public function run(): void

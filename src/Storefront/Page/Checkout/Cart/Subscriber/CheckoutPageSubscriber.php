@@ -9,9 +9,11 @@ use Shopware\Storefront\Page\Checkout\Cart\CheckoutCartPageLoadedEvent;
 use Shopware\Storefront\Page\Checkout\Offcanvas\OffcanvasCartPageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class CheckoutPageSubscriber implements EventSubscriberInterface
+readonly class CheckoutPageSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private readonly ShareBasketServiceInterface $shareBasketService) {}
+    public function __construct(private ShareBasketServiceInterface $shareBasketService)
+    {
+    }
 
     public static function getSubscribedEvents(): array
     {
