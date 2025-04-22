@@ -11,7 +11,7 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(defaults: ['_routeScope' => ['storefront']])]
 class ShareBasketController extends StorefrontController
@@ -20,7 +20,8 @@ class ShareBasketController extends StorefrontController
         private readonly ShareBasketServiceInterface $shareBasketService,
         private readonly CustomerShareBasketServiceInterface $customerShareBasketService,
         private readonly SystemConfigService $systemConfigService,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/sharebasket/save', name: 'frontend.frosh.share-basket.save', options: ['seo' => false], defaults: ['XmlHttpRequest' => true], methods: ['POST'])]
     public function save(Request $request, SalesChannelContext $context): Response

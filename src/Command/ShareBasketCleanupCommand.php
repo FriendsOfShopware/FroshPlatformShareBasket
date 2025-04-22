@@ -7,6 +7,7 @@ namespace Frosh\ShareBasket\Command;
 use Frosh\ShareBasket\Core\Content\ShareBasket\ShareBasketDefinition;
 use Frosh\ShareBasket\Services\ShareBasketServiceInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
+use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,7 +31,7 @@ class ShareBasketCleanupCommand extends Command
 
         $result = $event->getEventByEntityName(ShareBasketDefinition::ENTITY_NAME);
 
-        if ($result !== null) {
+        if ($result instanceof EntityWrittenEvent) {
             $deleted = \count($result->getIds());
             $output->writeln($deleted . ' deleted');
         }

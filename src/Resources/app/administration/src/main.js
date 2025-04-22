@@ -1,1 +1,1 @@
-import './module/frosh-share-basket';
+import './module/frosh-share-basket'
