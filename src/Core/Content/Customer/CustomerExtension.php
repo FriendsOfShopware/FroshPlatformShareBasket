@@ -13,15 +13,20 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class CustomerExtension extends EntityExtension
 {
-    public function getDefinitionClass(): string
-    {
-        return CustomerDefinition::class;
-    }
-
     public function extendFields(FieldCollection $collection): void
     {
         $collection->add(
-            (new ManyToManyAssociationField('froshSavedCarts', ShareBasketDefinition::class, ShareBasketCustomerDefinition::class, 'customer_id', 'share_basket_id')),
+            new ManyToManyAssociationField('froshSavedCarts', ShareBasketDefinition::class, ShareBasketCustomerDefinition::class, 'customer_id', 'share_basket_id'),
         );
+    }
+
+    public function getEntityName(): string
+    {
+        return CustomerDefinition::ENTITY_NAME;
+    }
+
+    public function getDefinitionClass(): string
+    {
+        return CustomerDefinition::class;
     }
 }

@@ -1,17 +1,17 @@
 {
-    "frosh-share-basket": {
-        "general": {
-            "salesChannel": "Sales channel",
-            "mainMenuItemGeneral": "Products in saved baskets",
-            "descriptionTextModule": "Overview of the saved products"
-        },
-        "list": {
-            "titleSidebarItemRefresh": "Refresh",
-            "titleSidebarItemFilter": "Filter",
-            "columnProductNumber": "Product number",
-            "columnProductName": "Product",
-            "columnProductSaveCount": "Saved",
-            "columnProductQuantity": "Quantity"
-        }
+  "frosh-share-basket": {
+    "general": {
+      "salesChannel": "Sales channel",
+      "mainMenuItemGeneral": "Products in saved baskets",
+      "descriptionTextModule": "Overview of the saved products"
+    },
+    "list": {
+      "titleSidebarItemRefresh": "Refresh",
+      "titleSidebarItemFilter": "Filter",
+      "columnProductNumber": "Product number",
+      "columnProductName": "Product",
+      "columnProductSaveCount": "Saved",
+      "columnProductQuantity": "Quantity"
     }
+  }
 }

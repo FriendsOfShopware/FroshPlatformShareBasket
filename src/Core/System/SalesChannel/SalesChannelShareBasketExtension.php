@@ -26,6 +26,11 @@ class SalesChannelShareBasketExtension extends EntityExtension
         );
     }
 
+    public function getEntityName(): string
+    {
+        return SalesChannelDefinition::ENTITY_NAME;
+    }
+
     public function getDefinitionClass(): string
     {
         return SalesChannelDefinition::class;

@@ -19,7 +19,9 @@ class Migration1727439408ShareBasketCustomer extends MigrationStep
         $this->createShareBasketCustomerTable($connection);
     }
 
-    public function updateDestructive(Connection $connection): void {}
+    public function updateDestructive(Connection $connection): void
+    {
+    }
 
     private function createShareBasketCustomerTable(Connection $connection): void
     {
