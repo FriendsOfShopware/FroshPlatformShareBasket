@@ -22,5 +22,7 @@ class Migration1680037578ShareBasketLineItem extends MigrationStep
         $connection->executeStatement($sql);
     }
 
-    public function updateDestructive(Connection $connection): void {}
+    public function updateDestructive(Connection $connection): void
+    {
+    }
 }

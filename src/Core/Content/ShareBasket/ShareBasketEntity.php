@@ -24,7 +24,7 @@ class ShareBasketEntity extends Entity
 
     protected SalesChannelEntity $salesChannel;
 
-    protected ?CustomerCollection $customers;
+    protected ?CustomerCollection $customers = null;
 
     protected ShareBasketLineItemCollection $lineItems;
 

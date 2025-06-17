@@ -25,8 +25,9 @@ readonly class CustomerShareBasketService implements CustomerShareBasketServiceI
         private EntityRepository $shareBasketRepository,
         #[Autowire(service: 'frosh_share_basket_customer.repository')]
         private EntityRepository $shareBasketCustomerRepository,
-        private readonly SystemConfigService $systemConfigService,
-    ) {}
+        private SystemConfigService $systemConfigService,
+    ) {
+    }
 
     public function loadCustomerCarts(SalesChannelContext $salesChannelContext): ?ShareBasketCollection
     {

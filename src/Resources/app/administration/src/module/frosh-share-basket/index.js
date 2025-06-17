@@ -17,11 +17,13 @@ Module.register('frosh-share-basket', {
         },
     },
 
-    navigation: [{
-        label: 'frosh-share-basket.general.mainMenuItemGeneral',
-        color: '#079FDF',
-        path: 'frosh.share.basket.list',
-        icon: 'default-shopping-paper-bag-product',
-        parent: 'sw-marketing',
-    }],
+    navigation: [
+        {
+            label: 'frosh-share-basket.general.mainMenuItemGeneral',
+            color: '#079FDF',
+            path: 'frosh.share.basket.list',
+            icon: 'default-shopping-paper-bag-product',
+            parent: 'sw-marketing',
+        },
+    ],
 });

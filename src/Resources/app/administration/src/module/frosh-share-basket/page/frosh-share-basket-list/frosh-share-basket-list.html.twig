@@ -1,97 +1,92 @@
 {% block frosh_share_basket_list %}
     <sw-page class="frosh-share-basket-list">
-
         {% block frosh_share_basket_list_content %}
-            <template #content>
-
-                {% block frosh_share_basket_list_grid %}
-                    <sw-data-grid
-                            v-if="items"
-                            :dataSource="items"
-                            :showSelection="false"
-                            :showActions="false"
-                            :sortBy="sortBy"
-                            :sortDirection="sortDirection"
-                            :columns="columns"
-                            @column-sort="onSortColumn">
-
-                        {% block frosh_share_basket_list_grid_columns %}
+        <template #content>
+            {% block frosh_share_basket_list_grid %}
+            <sw-data-grid
+                v-if="items"
+                :dataSource="items"
+                :showSelection="false"
+                :showActions="false"
+                :sortBy="sortBy"
+                :sortDirection="sortDirection"
+                :columns="columns"
+                @column-sort="onSortColumn"
+            >
+                {% block frosh_share_basket_list_grid_columns %}
                             {% block frosh_share_basket_list_grid_columns_save_count %}
-                                <template #column-saveCount="{ item }">
+                <template #column-saveCount="{ item }">
                                     {% block frosh_share_basket_list_grid_columns_save_count_content %}
-                                        <template>
-                                            {{ item.saveCount }} x
-                                        </template>
+                                        {{ item.saveCount }} x
                                     {% endblock %}
                                 </template>
-                            {% endblock %}
-                        {% endblock %}
-
-                        <template #pagination>
-                            {% block frosh_share_basket_list_grid_pagination %}
-                                <sw-pagination :page="page"
-                                               :limit="limit"
-                                               :total="total"
-                                               :total-visible="7"
-                                               @page-change="onPageChange">
-                                </sw-pagination>
-                            {% endblock %}
-                        </template>
-                    </sw-data-grid>
                 {% endblock %}
+                        {% endblock %}
+                <template #pagination>
+                    {% block frosh_share_basket_list_grid_pagination %}
+                    <sw-pagination
+                        :page="page"
+                        :limit="limit"
+                        :total="total"
+                        :total-visible="7"
+                        @page-change="onPageChange"
+                    >
+                                </sw-pagination>
+                    {% endblock %}
+                </template>
+            </sw-data-grid>
+            {% endblock %}
 
                 {% block frosh_share_basket_list_grid_loader %}
-                    <sw-loader v-if="isLoading"></sw-loader>
-                {% endblock %}
-
-            </template>
+            <sw-loader v-if="isLoading" deprecated></sw-loader>
+            {% endblock %}
+        </template>
         {% endblock %}
 
         {% block frosh_share_basket_list_sidebar %}
-            <template #sidebar>
-                <sw-sidebar>
-
-                    {% block frosh_share_basket_list_sidebar_refresh %}
-                        <sw-sidebar-item
-                                icon="regular-undo"
-                                :title="$tc('frosh-share-basket.list.titleSidebarItemRefresh')"
-                                @click="onRefresh">
+        <template #sidebar>
+            <sw-sidebar>
+                {% block frosh_share_basket_list_sidebar_refresh %}
+                <sw-sidebar-item
+                    icon="regular-undo"
+                    :title="$tc('frosh-share-basket.list.titleSidebarItemRefresh')"
+                    @click="onRefresh"
+                >
                         </sw-sidebar-item>
-                    {% endblock %}
+                {% endblock %}
 
                     {% block frosh_share_basket_list_sidebar %}
-                        <sw-sidebar-item
-                                ref="filterSideBar"
-                                icon="regular-filter"
-                                :title="$tc('frosh-share-basket.list.titleSidebarItemFilter')"
-                                @sw-sidebar-item-close-content="closeContent"
-                                @click="closeContent">
+                <sw-sidebar-item
+                    ref="filterSideBar"
+                    icon="regular-filter"
+                    :title="$tc('frosh-share-basket.list.titleSidebarItemFilter')"
+                    @sw-sidebar-item-close-content="closeContent"
+                    @click="closeContent"
+                >
+                    {% block frosh_share_basket_list_sidebar_filter_sales_channel %}
+                    <sw-sidebar-collapse>
+                        <template #header>
+                            {{ $tc('frosh-share-basket.general.salesChannel') }}
+                        </template>
 
-                            {% block frosh_share_basket_list_sidebar_filter_sales_channel %}
-                                <sw-sidebar-collapse>
-                                    <template #header>{{ $tc('frosh-share-basket.general.salesChannel') }}</template>
-                                    <template #content>
-
-                                        {% block frosh_share_basket_list_sidebar_filter_sales_channel_items %}
-                                            <div v-for="(item, index) in salesChannelFilters">
-                                                <sw-newsletter-recipient-filter-switch
-                                                        :id="item.id"
-                                                        group="sales_channel_id"
-                                                        :label="item.translated.name"
-                                                        @update:value="onChange" />
-                                            </div>
-                                        {% endblock %}
-
-                                    </template>
-                                </sw-sidebar-collapse>
+                        <template #content>
+                            {% block frosh_share_basket_list_sidebar_filter_sales_channel_items %}
+                            <div v-for="(item, index) in salesChannelFilters">
+                                <sw-newsletter-recipient-filter-switch
+                                    :id="item.id"
+                                    group="sales_channel_id"
+                                    :label="item.translated.name"
+                                    @update:value="onChange"
+                                />
+                            </div>
                             {% endblock %}
-
-                        </sw-sidebar-item>
+                        </template>
+                    </sw-sidebar-collapse>
                     {% endblock %}
-
-                </sw-sidebar>
-            </template>
+                </sw-sidebar-item>
+                {% endblock %}
+            </sw-sidebar>
+        </template>
         {% endblock %}
-
     </sw-page>
 {% endblock %}

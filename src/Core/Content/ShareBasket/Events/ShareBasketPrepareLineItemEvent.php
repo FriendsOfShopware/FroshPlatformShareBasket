@@ -26,7 +26,8 @@ class ShareBasketPrepareLineItemEvent extends Event
         private array $shareBasketLineItem,
         private readonly LineItem $lineItem,
         private readonly SalesChannelContext $salesChannelContext,
-    ) {}
+    ) {
+    }
 
     /**
      * @return array{

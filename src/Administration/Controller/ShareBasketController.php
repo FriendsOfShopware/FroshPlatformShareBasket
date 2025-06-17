@@ -12,17 +12,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(defaults: ['_routeScope' => ['api']])]
 class ShareBasketController extends AbstractController
 {
-    public function __construct(private readonly Connection $connection) {}
+    public function __construct(private readonly Connection $connection)
+    {
+    }
 
     #[Route(path: '/api/frosh/sharebasket/statistics', name: 'api.action.frosh.share-basket.statistics', methods: ['POST'])]
     public function statistics(Request $request, Context $context): Response
     {
         $languageId = $request->get('languageId', $context->getLanguageId());
+        if ($languageId === null) {
+            return new JsonResponse();
+        }
+
         $page = $request->get('page');
         $limit = $request->get('limit');
         $offset = ($page - 1) * $limit;
@@ -30,12 +36,10 @@ class ShareBasketController extends AbstractController
 
         $query = $this->connection->createQueryBuilder();
         $query->select(
-            [
-                'SQL_CALC_FOUND_ROWS product.product_number as productNumber',
-                'SUM(1 * save_count) as saveCount',
-                'SUM(froshShareBasketLineItem.quantity * save_count) as totalQuantity',
-                'IFNULL(translation.name, translationDefault.name) as productName',
-            ],
+            'SQL_CALC_FOUND_ROWS product.product_number as productNumber',
+            'SUM(1 * save_count) as saveCount',
+            'SUM(froshShareBasketLineItem.quantity * save_count) as totalQuantity',
+            'IFNULL(translation.name, translationDefault.name) as productName',
         )
             ->from('frosh_share_basket', 'shareBasket')
             ->innerJoin(

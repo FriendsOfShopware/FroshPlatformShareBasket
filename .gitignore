@@ -1,6 +1,6 @@
-/.idea
-/.php-cs-fixer.cache
 /composer.lock
-src/Resources/app/storefront/dist/storefront/js/
-src/Resources/public
+src/Resources/app/administration/src/.vite
+src/Resources/app/storefront/build
+src/Resources/app/storefront/dist
 src/Resources/app/storefront/node_modules/
+src/Resources/public
