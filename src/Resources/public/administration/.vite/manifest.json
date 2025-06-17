@@ -1,0 +1,11 @@
+{
+  "main.js": {
+    "file": "js/frosh-platform-share-basket.js",
+    "name": "frosh-platform-share-basket",
+    "src": "main.js",
+    "isEntry": true,
+    "css": [
+      "css/frosh-platform-share-basket.css"
+    ]
+  }
+}
