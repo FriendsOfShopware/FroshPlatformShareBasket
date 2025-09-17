@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Frosh\ShareBasket\Core\Content\ShareBasket\Events;
 
+use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Contracts\EventDispatcher\Event;
@@ -26,6 +27,7 @@ class ShareBasketPrepareLineItemEvent extends Event
         private array $shareBasketLineItem,
         private readonly LineItem $lineItem,
         private readonly SalesChannelContext $salesChannelContext,
+        private readonly Cart $cart
     ) {
     }
 
@@ -67,5 +69,10 @@ class ShareBasketPrepareLineItemEvent extends Event
     public function getSalesChannelContext(): SalesChannelContext
     {
         return $this->salesChannelContext;
+    }
+
+    public function getCart(): Cart
+    {
+        return $this->cart;
     }
 }
