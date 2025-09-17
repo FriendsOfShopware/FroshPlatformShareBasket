@@ -29,8 +29,22 @@
                         <tbody>
                             {% for lineItem in basket.lineItems %}
                                 <tr class="align-middle">
-                                    <td class="product-image">
-                                        <img src="{{ lineItem.product.cover.media.url }}" alt="{{ lineItem.product.translated.name }}" title="{{ lineItem.product.translated.name }}" />
+                                    <td>
+                                        <div class="product-image">
+                                            {% set media = lineItem.product.cover.media %}
+                                            {% sw_thumbnails 'line-item-img-thumbnails' with {
+                                                media: lineItem.product.cover.media,
+                                                sizes: {
+                                                    default: '100px'
+                                                },
+                                                attributes: {
+                                                    class: 'img-fluid line-item-img',
+                                                    title: (media.translated.title ?: lineItem.product.translated.name),
+                                                    alt: (media.translated.alt ?: lineItem.product.translated.name),
+                                                    loading: 'lazy',
+                                                }
+                                            } %}
+                                        </div>
                                     </td>
                                     <td>
                                         <a href="{{ url('frontend.detail.page', {productId: lineItem.product.id}) }}">
