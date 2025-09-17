@@ -1,0 +1,25 @@
+{
+  "base": "/bundles/froshplatformsharebasket/administration/",
+  "entryPoints": {
+    "frosh-platform-share-basket": {
+      "css": [
+        "/bundles/froshplatformsharebasket/administration/css/frosh-platform-share-basket.css"
+      ],
+      "dynamic": [],
+      "js": [
+        "/bundles/froshplatformsharebasket/administration/js/frosh-platform-share-basket.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.0.4",
+    7,
+    0,
+    4
+  ],
+  "viteServer": null
+}
