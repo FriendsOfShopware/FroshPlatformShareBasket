@@ -38,7 +38,10 @@
             {% endblock %}
 
                 {% block frosh_share_basket_list_grid_loader %}
-            <sw-loader v-if="isLoading" deprecated></sw-loader>
+            <sw-loader
+                v-if="isLoading"
+                deprecated
+            ></sw-loader>
             {% endblock %}
         </template>
         {% endblock %}

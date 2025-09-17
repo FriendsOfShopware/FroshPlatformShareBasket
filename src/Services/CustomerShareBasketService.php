@@ -39,8 +39,7 @@ readonly class CustomerShareBasketService implements CustomerShareBasketServiceI
         $criteria = new Criteria();
         $criteria
             ->addFilter(new EqualsFilter('customers.id', $customerId))
-            ->addAssociation('lineItems.product.cover')
-        ;
+            ->addAssociation('lineItems.product.cover.media');
 
         if ($this->systemConfigService->getBool('FroshPlatformShareBasket.config.showCartsFromAllSalesChannels', $salesChannelContext->getSalesChannelId()) === false) {
             $criteria->addFilter(new EqualsFilter('salesChannelId', $salesChannelContext->getSalesChannelId()));

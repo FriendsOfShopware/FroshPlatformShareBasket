@@ -4,7 +4,7 @@
         color: #fff;
 
         &:hover {
-            background-color: darken(#32b322, 10%);
+            background-color: #26881a;
         }
     }
 
@@ -13,7 +13,7 @@
         color: #fff;
 
         &:hover {
-            background-color: darken(#4b6fbd, 10%);
+            background-color: #39589c;
         }
     }
 
@@ -24,7 +24,7 @@
     }
 }
 
-.saved-cart-table .product-image img {
-    max-width: 80px;
-    max-height: 80px;
+.saved-cart-table .product-image {
+    text-align: center;
+    width: 70px;
 }
