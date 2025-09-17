@@ -155,7 +155,7 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
             ];
 
             $event = $this->eventDispatcher->dispatch(
-                new ShareBasketPrepareLineItemEvent($shareBasketLineItem, $lineItem, $salesChannelContext),
+                new ShareBasketPrepareLineItemEvent($shareBasketLineItem, $lineItem, $salesChannelContext, $cart),
                 ShareBasketPrepareLineItemEvent::class,
             );
 
