@@ -343,6 +343,7 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
         ShareBasketLineItemEntity $shareBasketLineItemEntity,
     ): LineItem {
         $itemBuilder = new PromotionItemBuilder();
+
         return $itemBuilder->buildPlaceholderItem(
             $shareBasketLineItemEntity->getIdentifier(),
         );
