@@ -6,12 +6,15 @@ namespace Frosh\ShareBasket\Core\Content\ShareBasket\Events;
 
 use Frosh\ShareBasket\Core\Content\ShareBasket\Aggregate\ShareBasketLineItem\ShareBasketLineItemEntity;
 use Shopware\Core\Checkout\Cart\Cart;
+use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class ShareBasketAddLineItemEvent extends Event
 {
     final public const EVENT_NAME = 'frosh.share_basket.add_line_item';
+
+    private ?LineItem $lineItem = null;
 
     public function __construct(
         private readonly Cart $cart,
@@ -33,5 +36,15 @@ class ShareBasketAddLineItemEvent extends Event
     public function getShareBasketLineItemEntity(): ShareBasketLineItemEntity
     {
         return $this->shareBasketLineItemEntity;
+    }
+
+    public function setLineItem(?LineItem $lineItem): void
+    {
+        $this->lineItem = $lineItem;
+    }
+
+    public function getLineItem(): ?LineItem
+    {
+        return $this->lineItem;
     }
 }

@@ -216,23 +216,34 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
         SalesChannelContext $salesChannelContext,
         ShareBasketEntity $shareBasketEntity,
     ): void {
+        $lineItems = [];
         foreach ($shareBasketEntity->getLineItems() as $shareBasketLineItemEntity) {
             try {
                 $this->eventDispatcher->dispatch(
-                    new ShareBasketAddLineItemEvent($cart, $salesChannelContext, $shareBasketLineItemEntity),
+                    $event = new ShareBasketAddLineItemEvent($cart, $salesChannelContext, $shareBasketLineItemEntity),
                     ShareBasketAddLineItemEvent::class,
                 );
 
+                if ($event->getLineItem() !== null) {
+                    $lineItems[] = $event->getLineItem();
+                }
+
                 if ($shareBasketLineItemEntity->getType() === LineItem::PRODUCT_LINE_ITEM_TYPE) {
-                    $this->addProduct($cart, $salesChannelContext, $shareBasketLineItemEntity);
+                    $product = $this->addProduct($salesChannelContext, $shareBasketLineItemEntity);
+
+                    if ($product !== null) {
+                        $lineItems[] = $product;
+                    }
                 }
 
                 if ($shareBasketLineItemEntity->getType() === PromotionProcessor::LINE_ITEM_TYPE) {
-                    $this->addPromotion($cart, $salesChannelContext, $shareBasketLineItemEntity);
+                    $lineItems[] = $this->addPromotion($shareBasketLineItemEntity);
                 }
             } catch (\Exception) {
             }
         }
+
+        $this->cartService->add($cart, $lineItems, $salesChannelContext);
     }
 
     /**
@@ -305,14 +316,13 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
     }
 
     private function addProduct(
-        Cart $cart,
         SalesChannelContext $salesChannelContext,
         ShareBasketLineItemEntity $shareBasketLineItemEntity,
-    ): void {
+    ): ?LineItem {
         $productId = $this->getProductIdByNumber($shareBasketLineItemEntity->getIdentifier(), $salesChannelContext);
 
         if ($productId === null) {
-            return;
+            return null;
         }
 
         $lineItem = new LineItem(
@@ -325,19 +335,17 @@ readonly class ShareBasketService implements ShareBasketServiceInterface
         $lineItem->setStackable($shareBasketLineItemEntity->isStackable());
         $lineItem->setRemovable($shareBasketLineItemEntity->isRemovable());
         $lineItem->setPayload(['id' => $productId]);
-        $this->cartService->add($cart, $lineItem, $salesChannelContext);
+
+        return $lineItem;
     }
 
     private function addPromotion(
-        Cart $cart,
-        SalesChannelContext $salesChannelContext,
         ShareBasketLineItemEntity $shareBasketLineItemEntity,
-    ): void {
+    ): LineItem {
         $itemBuilder = new PromotionItemBuilder();
-        $lineItem = $itemBuilder->buildPlaceholderItem(
+        return $itemBuilder->buildPlaceholderItem(
             $shareBasketLineItemEntity->getIdentifier(),
         );
-        $this->cartService->add($cart, $lineItem, $salesChannelContext);
     }
 
     private function getProductIdByNumber(string $number, SalesChannelContext $salesChannelContext): ?string
